@@ -317,9 +317,6 @@ Use environment variables for sensitive configuration.
 | ----------------- | ------------------------------- |
 | `README.md`       | Project overview and setup      |
 | `SRS_PRD.md`      | Requirements and project scope  |
-| `WEEK1_SPRINT.md` | Sprint 1 tasks                  |
-| `CONTRIBUTING.md` | Git and contribution guidelines |
-
 ---
 
 # Project Goal
