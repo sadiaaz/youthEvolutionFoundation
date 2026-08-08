@@ -1,57 +1,72 @@
-# 🌱 Youth Evolution Foundation (YEF) Web Platform
+# Youth Evolution Foundation (YEF)
 
-A modern, responsive, and content-managed website for **Youth Evolution Foundation (YEF)**, focused on youth empowerment, education, mentorship, community development, and social impact.
+## Official Web Platform
 
-The platform is being developed as a **2-month team project** using modern web technologies and a collaborative GitHub workflow.
+A modern, responsive, and content-managed website designed to showcase YEF's mission, programs, events, community initiatives, and opportunities for youth engagement.
 
----
-
-## 🚀 Project Overview
-
-The YEF Web Platform will provide a professional online presence for the foundation and allow visitors to:
-
-* Learn about YEF and its mission
-* Explore programs and initiatives
-* View upcoming and past events
-* Read blogs and updates
-* Meet the YEF team
-* Apply for volunteer opportunities
-* View donation information
-* Contact the foundation
-
-Content will be managed through **Sanity CMS**, allowing authorized content editors to update website content without changing the application code.
+**Project Status:** In Development
+**Duration:** 2 Months
+**Project Lead:** Sadia Saad
 
 ---
 
-## 🛠️ Technology Stack
+## Live Website
 
-| Area            | Technology   |
+**Coming Soon**
+
+The production website will be deployed on Vercel after development and testing.
+
+---
+
+## Key Features
+
+* Responsive homepage
+* About YEF and its mission
+* Programs and initiatives
+* Events and activities
+* Blog and news
+* Team section
+* Volunteer application
+* Donation information
+* Contact page
+* Sanity CMS content management
+* SEO-friendly structure
+* Mobile, tablet, and desktop support
+
+---
+
+## Technology Stack
+
+| Category        | Technology   |
 | --------------- | ------------ |
 | Frontend        | Next.js 15   |
 | Language        | TypeScript   |
 | Styling         | Tailwind CSS |
 | CMS             | Sanity CMS   |
 | Design          | Figma        |
-| Version Control | GitHub       |
+| Version Control | Git & GitHub |
 | Deployment      | Vercel       |
 
 ---
 
-## 🏗️ Project Architecture
+## Architecture
 
 ```text
-User
-  ↓
-Next.js Website
-  ↓
+Users
+  │
+  ▼
+Next.js Frontend
+  │
+  ▼
 Sanity CMS
-  ↓
+  │
+  ▼
 Vercel
 ```
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 yef-website/
@@ -59,20 +74,29 @@ yef-website/
 ├── src/
 │   ├── app/              # Next.js App Router
 │   ├── components/       # Reusable UI components
-│   ├── sanity/            # Sanity configuration & schemas
-│   ├── hooks/             # Custom React hooks
-│   ├── types/             # TypeScript types
-│   └── utils/             # Utility functions
+│   ├── sanity/           # Sanity configuration & schemas
+│   ├── hooks/            # Custom React hooks
+│   ├── types/            # TypeScript types
+│   └── utils/            # Utility functions
 │
-├── public/                # Static assets
-├── .env.local             # Local environment variables
+├── public/               # Static assets
+├── .env.local            # Local environment variables
 ├── package.json
 └── README.md
 ```
 
 ---
 
-# ⚙️ Getting Started
+# Getting Started
+
+## Prerequisites
+
+Make sure you have installed:
+
+* Node.js
+* npm
+* Git
+* VS Code (recommended)
 
 ## 1. Clone the Repository
 
@@ -94,18 +118,18 @@ npm install
 
 ## 4. Configure Environment Variables
 
-Create a `.env.local` file in the project root.
+Create a `.env.local` file inside the `yef-website` directory.
 
-Add the environment variables provided by the **Project Lead**.
+Add the environment variables provided by the Project Lead:
 
 ```env
 NEXT_PUBLIC_SANITY_PROJECT_ID=YOUR_PROJECT_ID
 NEXT_PUBLIC_SANITY_DATASET=production
 ```
 
-> Do not commit `.env.local` or any API keys/secrets to GitHub.
+> Never commit `.env.local`, API keys, passwords, or private tokens to GitHub.
 
-## 5. Start Development Server
+## 5. Run the Development Server
 
 ```bash
 npm run dev
@@ -113,24 +137,29 @@ npm run dev
 
 Open:
 
-**Website:** http://localhost:3000
+* Website: http://localhost:3000
+* Sanity Studio: http://localhost:3000/studio
 
-**Sanity Studio:** http://localhost:3000/studio
+For first-time Sanity setup:
+
+```bash
+npx sanity login
+```
 
 ---
 
-# 🌿 Git & GitHub Workflow
+# Git & Contribution Workflow
 
-We use a feature-branch workflow.
+All team members must follow the project Git workflow.
 
-### 1. Update Your Local `develop`
+### 1. Update `develop`
 
 ```bash
 git checkout develop
 git pull origin develop
 ```
 
-### 2. Create Your Feature Branch
+### 2. Create a Feature Branch
 
 ```bash
 git checkout -b feature/your-task-name
@@ -142,9 +171,9 @@ Example:
 git checkout -b feature/home-page
 ```
 
-### 3. Work on Your Assigned Task
+### 3. Complete Your Task
 
-Complete and test your changes locally.
+Make your changes and test them locally.
 
 ### 4. Commit Your Changes
 
@@ -164,166 +193,111 @@ git push origin feature/home-page
 Create a Pull Request:
 
 ```text
-feature/your-task-name
-        ↓
-      develop
+feature/home-page → develop
 ```
 
-Assign the **Project Lead** as reviewer.
+Assign the Project Lead for review.
 
-### ⚠️ Important
+### Important Rules
 
-**Do not push directly to `main` or `develop`.**
-
-All major changes should go through a Pull Request and review process.
+* Do not push directly to `main`.
+* Do not push directly to `develop`.
+* One task should use one feature branch.
+* Test your work before creating a Pull Request.
+* Use meaningful commit messages.
+* Code review is required before merging.
 
 ---
 
-# 👥 Team
+# Team
 
 ### Project Lead
 
 **Sadia Saad**
 
-Responsibilities:
-
-* Project architecture
-* GitHub management
-* Code review
-* Pull Request approval
-* Project coordination
-* Technical decisions
-* Deployment
-* Team support
+Project architecture, GitHub management, code review, coordination, deployment, and technical decisions.
 
 ### UI/UX Designer
 
 **Sidra Amjad**
 
-Responsibilities:
+Figma design, design system, wireframes, responsive UI, and UX research.
 
-* Figma designs
-* Design system
-* Wireframes
-* Responsive UI
-* UI/UX research
-
-### Frontend Developer 1
+### Frontend Developer
 
 **Nuzhat Qureshi**
 
-Responsibilities:
+Frontend architecture, layout, navigation, routing, and page structure.
 
-* Frontend architecture
-* Next.js structure
-* Layout
-* Navbar
-* Footer
-* Routing
-
-### Frontend Developer 2
+### Frontend Developer
 
 **Numair Iqbal**
 
-Responsibilities:
+Reusable UI components, forms, cards, buttons, and responsive components.
 
-* Reusable UI components
-* Buttons
-* Cards
-* Forms
-* Responsive components
-
-### Backend Developer 1
+### Backend / CMS Developer
 
 **Abdul Basit**
 
-Responsibilities:
+Sanity CMS architecture, schemas, content structure, and CMS configuration.
 
-* Sanity CMS
-* Sanity schemas
-* Content structure
-* CMS configuration
-
-### Backend Developer 2
+### Backend / Integration Developer
 
 **Intern 5**
 
-Responsibilities:
-
-* Sanity integration
-* GROQ queries
-* Data fetching
-* Next.js ↔ Sanity integration
+Sanity integration, GROQ queries, data fetching, and Next.js–Sanity integration.
 
 ---
 
-# 📋 Core Website Modules
+# Development Timeline
 
-The planned website includes:
-
-* 🏠 Home
-* ℹ️ About
-* 🌱 Programs
-* 📅 Events
-* 📝 Blog
-* 👥 Team
-* 🙋 Volunteer
-* ❤️ Donate
-* 📞 Contact
-
----
-
-# 🎨 Design Principles
-
-The website should be:
-
-* Modern
-* Clean
-* Responsive
-* Accessible
-* User-friendly
-* Performance-focused
-* Consistent with YEF branding
-
-The UI/UX team will use **Figma** for design and maintain a shared design system.
+| Week   | Focus                                                              |
+| ------ | ------------------------------------------------------------------ |
+| Week 1 | Project setup, UI/UX foundation, frontend architecture & CMS setup |
+| Week 2 | Home page                                                          |
+| Week 3 | About & Programs                                                   |
+| Week 4 | Events & Blog                                                      |
+| Week 5 | Volunteer, Donation & Contact                                      |
+| Week 6 | CMS integration                                                    |
+| Week 7 | Testing, SEO & responsive improvements                             |
+| Week 8 | Final testing, deployment & documentation                          |
 
 ---
 
-# 🗓️ Project Timeline
+# Design Guidelines
 
-The project is planned for **8 weeks**.
+The website should maintain:
 
-| Week   | Focus                                                       |
-| ------ | ----------------------------------------------------------- |
-| Week 1 | Project setup, design system, architecture & CMS foundation |
-| Week 2 | Home page                                                   |
-| Week 3 | About & Programs                                            |
-| Week 4 | Events & Blog                                               |
-| Week 5 | Volunteer, Donate & Contact                                 |
-| Week 6 | CMS integration                                             |
-| Week 7 | Testing, SEO & responsive improvements                      |
-| Week 8 | Final testing, deployment & documentation                   |
+* Consistent YEF branding
+* Clean and modern UI
+* Responsive layouts
+* Accessible components
+* Consistent typography
+* Reusable design components
+* Mobile-first considerations
 
----
-
-# 🧪 Quality Standards
-
-Before submitting a Pull Request, developers should:
-
-* Test their changes locally
-* Check responsive layouts
-* Fix TypeScript errors
-* Fix ESLint errors
-* Keep components reusable
-* Follow the project folder structure
-* Use meaningful commit messages
-* Avoid unnecessary code duplication
+All major UI designs will be maintained in Figma.
 
 ---
 
-# 🔐 Security
+# Quality Standards
 
-Never commit:
+Before creating a Pull Request:
+
+* Test the feature locally.
+* Check desktop and mobile layouts.
+* Fix TypeScript errors.
+* Fix ESLint errors.
+* Follow the project folder structure.
+* Avoid unnecessary code duplication.
+* Use reusable components.
+* Verify existing features are not broken.
+
+---
+
+# Security
+
+Never commit sensitive information such as:
 
 ```text
 .env.local
@@ -337,58 +311,50 @@ Use environment variables for sensitive configuration.
 
 ---
 
-# 🎯 Project Goal
+# Project Documentation
 
-The goal is not only to build a website, but to give the team experience with a **real-world software development workflow**, including:
+| File              | Purpose                         |
+| ----------------- | ------------------------------- |
+| `README.md`       | Project overview and setup      |
+| `SRS_PRD.md`      | Requirements and project scope  |
+| `WEEK1_SPRINT.md` | Sprint 1 tasks                  |
+| `CONTRIBUTING.md` | Git and contribution guidelines |
+
+---
+
+# Project Goal
+
+This project is not only about building a website. It is also an opportunity for the team to experience a real-world software development workflow, including:
 
 * Team collaboration
-* Git & GitHub
+* Git and GitHub
+* Feature branches
 * Pull Requests
 * Code reviews
 * UI/UX handoff
 * Next.js development
 * Sanity CMS
-* API/data integration
+* Data integration
 * Testing
 * Deployment
 
 ---
 
-## 📌 Project Status
+# License
 
-**Current Sprint:** Sprint 1
+This project is being developed for **Youth Evolution Foundation (YEF)**.
 
-**Status:** 🚧 In Development
-
-**Duration:** 2 Months
+The project source code is private and intended for authorized project contributors.
 
 ---
 
-## 🤝 Contribution
+# Contact
 
-Please follow the project's Git workflow and development guidelines before contributing.
+**Youth Evolution Foundation (YEF)**
 
-For questions, technical issues, or blockers, coordinate with the team and contact the **Project Lead**.
-
----
-
-## 📄 Documentation
-
-Project documentation includes:
-
-* `README.md` — Project overview and setup
-* `SRS_PRD.md` — Project requirements
-* `WEEK1_SPRINT.md` — Sprint 1 tasks
-* `CONTRIBUTING.md` — Git and contribution guidelines
+Email: [info@youthevolutionfoundation.com](mailto:info@youthevolutionfoundation.com)
+Website: https://www.youthevolutionfoundation.com
 
 ---
 
-## 🌍 Youth Evolution Foundation
-
-**Website:** https://www.youthevolutionfoundation.com
-
-**Email:** [info@youthevolutionfoundation.com](mailto:info@youthevolutionfoundation.com)
-
----
-
-### Built with ❤️ by the YEF Web Development Team
+**Built by the YEF Web Development Team**
