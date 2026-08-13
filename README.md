@@ -243,7 +243,7 @@ Sanity CMS architecture, schemas, content structure, and CMS configuration.
 
 ### Backend / Integration Developer
 
-**Intern 5**
+**Abdul Bais**
 
 Sanity integration, GROQ queries, data fetching, and Next.js–Sanity integration.
 
