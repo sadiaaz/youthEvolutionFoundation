@@ -230,6 +230,37 @@ export default async function OurWorkPage() {
         </Container>
       </section>
 
+      {/* Real Field Images Section (static placeholders — no Sanity schema yet; swap for real photos once received from Sadia) */}
+      <section className="bg-gray-50 py-16 md:py-24">
+        <Container>
+          <Heading className="text-brand-dark text-3xl md:text-4xl font-bold text-center mb-12">
+            Real Field Images
+          </Heading>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { id: 1, src: "https://via.placeholder.com/500x350", alt: "Volunteers at community event" },
+              { id: 2, src: "https://via.placeholder.com/500x350", alt: "Youth workshop in progress" },
+              { id: 3, src: "https://via.placeholder.com/500x350", alt: "Clean water project site" },
+              { id: 4, src: "https://via.placeholder.com/500x350", alt: "Community garden volunteers" },
+              { id: 5, src: "https://via.placeholder.com/500x350", alt: "Leadership training session" },
+              { id: 6, src: "https://via.placeholder.com/500x350", alt: "Local partnership meeting" },
+            ].map((img) => (
+              <div
+                key={img.id}
+                className="overflow-hidden rounded-xl aspect-[4/3]"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* Partners Section */}
       <section className="bg-white py-16 md:py-24">
         <Container>
