@@ -5,5 +5,4 @@ export const dataset =
   process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
 export const projectId =
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'b07ptycbol'
-
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'b07pcbol'
