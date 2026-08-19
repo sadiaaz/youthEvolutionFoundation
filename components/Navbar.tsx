@@ -21,6 +21,7 @@ interface NavLink {
 const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/", title: "Youth Evolution Foundation Home" },
   { label: "About", href: "/about-us", title: "About Youth Evolution Foundation" },
+  { label: "Our Work", href: "/our-work", title: "Our Work in Evolution Foundation" },
   { label: "Programs", href: "/programs", title: "Our Programs and Welfare Projects" },
   { label: "Events", href: "/events", title: "Upcoming Foundation Events" },
   { label: "News", href: "/news", title: "Latest News and Updates" },
