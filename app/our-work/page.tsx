@@ -204,7 +204,7 @@ export default async function OurWorkPage() {
         />
 
         <Container>
-          <div className="relative py-24 text-center md:py-32">
+         <div className="relative flex min-h-[420px] flex-col items-center justify-center text-center pt-20 md:pt-24 md:min-h-[520px]">
             <Heading
               id="our-work-hero-title"
               level={1}
@@ -552,10 +552,19 @@ export default async function OurWorkPage() {
                   .filter((partner) => partner.logo)
                   .map((partner) => {
                     const logoContent = (
-                     <div
-  className="flex h-90 w-90 items-center justify-center rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-shadow duration-200 hover:shadow-md"
-  title={partner.name}
->
+                      <div
+                        className="logo"
+                        style={{
+                          width: "170px",
+                          height: "170px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden",
+                          backgroundColor: "white"
+                        }}
+                        title={partner.name}
+                      >
                         <img
                           src={getImageUrl(
                             partner.logo as SanityImageSource,
@@ -565,7 +574,12 @@ export default async function OurWorkPage() {
                           alt={partner.name}
                           loading="lazy"
                           decoding="async"
-                          className="h-full w-full object-cover"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",
+                            display: "block"
+                          }}
                         />
                       </div>
                     );
