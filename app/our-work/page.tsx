@@ -173,19 +173,19 @@ export default async function OurWorkPage() {
   const statistics = [
     {
       value: programs.length,
-      label: "Programs",
+      label: "Programs"
     },
     {
       value: projects.length,
-      label: "Projects",
+      label: "Projects"
     },
     {
       value: publishedStories.length,
-      label: "Impact Stories",
+      label: "Impact Stories"
     },
     {
       value: partners.length,
-      label: "Partners",
+      label: "Partners"
     },
   ];
 
@@ -255,7 +255,7 @@ export default async function OurWorkPage() {
                     key={program._id}
                     hoverable
                     noPadding
-                    className="overflow-hidden rounded-xl"
+                    className="overflow-hidden rounded-md"
                   >
                     {program.image && (
                       <Card.Image
@@ -326,7 +326,7 @@ export default async function OurWorkPage() {
                     key={project._id}
                     hoverable
                     noPadding
-                    className="relative overflow-hidden rounded-xl"
+                    className="relative overflow-hidden rounded-md"
                   >
                     {project.image && (
                       <div className="relative">
@@ -382,8 +382,9 @@ export default async function OurWorkPage() {
         </Container>
       </section>
 
+      {/* ===== PROFESSIONAL STATISTICS SECTION (2x2 Grid + Image) ===== */}
       <section
-        className="bg-brand-primary py-16 md:py-20"
+        className="bg-slate-900 py-16 md:py-24"
         aria-labelledby="impact-statistics-title"
       >
         <Container>
@@ -397,21 +398,36 @@ export default async function OurWorkPage() {
             Impact Statistics
           </Heading>
 
-          <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-            {statistics.map((stat) => (
-              <div key={stat.label}>
-                <p className="text-4xl font-bold text-white md:text-5xl">
-                  {stat.value}
-                </p>
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 items-center">
+            {/* Left Side: 4 Stats in 2x2 Grid */}
+            <div className="grid grid-cols-2 gap-y-12 gap-x-4">
+              {statistics.map((stat, index) => (
+                <div 
+                  key={stat.label} 
+                  className="border-l-4 border-orange-500 pl-4 md:pl-6 transition-all duration-300 hover:border-orange-400"
+                >
+                  <p className="text-4xl font-extrabold text-white md:text-5xl tracking-tight">
+                    {stat.value.toLocaleString()}
+                  </p>
+                  <p className="mt-1 text-sm font-medium uppercase tracking-wider text-slate-400">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
 
-                <p className={`${paragraphClass} mt-2 text-white`}>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
+            {/* Right Side: Image (Radius changed to rounded-md) */}
+            <div className="relative w-full aspect-[4/3] md:aspect-square overflow-hidden rounded-md bg-slate-800 shadow-2xl">
+              <img
+                src={heroImageUrl}
+                alt="Impact Statistics Background"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
         </Container>
       </section>
+      {/* ===== PROFESSIONAL STATISTICS SECTION END ===== */}
 
       <section
         className={`bg-white ${sectionClass}`}
@@ -440,7 +456,7 @@ export default async function OurWorkPage() {
                 {publishedStories.map((story) => (
                   <Card
                     key={story._id}
-                    className="flex h-full flex-col justify-between rounded-xl"
+                    className="flex h-full flex-col justify-between rounded-md"
                   >
                     <p
                       className={`${paragraphClass} ${mutedTextClass}`}
