@@ -65,17 +65,23 @@ export default async function AboutUsPage() {
   return (
     <>
       {/* Hero */}
-      <Section background="brand" spacing="lg">
-        <Heading level={1} align="center" className="text-white">
-          {about?.heroTitle}
-        </Heading>
-        {about?.heroSubtitle && (
-          <p className="mt-4 text-center text-lg text-blue-100 max-w-2xl mx-auto">
-            {about.heroSubtitle}
-          </p>
-        )}
-      </Section>
-
+<Section background="brand" spacing="lg">
+  {about?.heroImage && (
+    <img
+      src={urlFor(about.heroImage).width(1200).height(500).url()}
+      alt={about.heroImage?.alt || "About Youth Evolution Foundation"}
+      className="w-full rounded-xl object-cover mb-8"
+    />
+  )}
+  <Heading level={1} align="center" className="text-white">
+    {about?.heroTitle}
+  </Heading>
+  {about?.heroSubtitle && (
+    <p className="mt-4 text-center text-lg text-blue-100 max-w-2xl mx-auto">
+      {about.heroSubtitle}
+    </p>
+  )}
+</Section>
       {/* Our Story */}
       <Section background="white" spacing="md">
         <Heading level={2}>{about?.storyTitle || "Our Story"}</Heading>
