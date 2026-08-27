@@ -1,4 +1,8 @@
 import Link from "next/link";
+<<<<<<< HEAD
+=======
+import Image from "next/image";
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
 import { Container } from "@/components/Container";
 import { Heading } from "@/components/Heading";
 import { Card } from "@/components/Card";
@@ -81,10 +85,17 @@ const mutedTextClass = "text-brand-gray";
 const sectionClass = "py-16 md:py-24";
 
 const primaryLinkClass =
+<<<<<<< HEAD
   "inline-flex items-center justify-center rounded-lg bg-brand-primary px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2";
 
 const outlineLinkClass =
   "inline-flex items-center justify-center rounded-lg border border-white px-6 py-3 text-base font-medium text-white transition-colors duration-200 hover:bg-white hover:text-brand-darkest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2";
+=======
+  "inline-flex items-center justify-center rounded-full bg-brand-primary px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-blue-900/30 transition-all duration-300 hover:bg-blue-800 hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2";
+
+const outlineLinkClass =
+  "inline-flex items-center justify-center rounded-full border-2 border-white/70 px-7 py-3.5 text-base font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-brand-darkest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2";
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
 
 const fallbackFieldImage = "/images/yef-field-activity.png";
 
@@ -190,7 +201,12 @@ export default async function OurWorkPage() {
   ];
 
   return (
+<<<<<<< HEAD
     <main>
+=======
+    <div>
+      {/* HERO SECTION */}
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
       <section
         className="relative overflow-hidden bg-brand-darkest text-white"
         aria-labelledby="our-work-hero-title"
@@ -225,6 +241,10 @@ export default async function OurWorkPage() {
         </Container>
       </section>
 
+<<<<<<< HEAD
+=======
+      {/* PROGRAMS SECTION */}
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
       <section
         id="programs"
         className={`bg-white ${sectionClass}`}
@@ -255,7 +275,11 @@ export default async function OurWorkPage() {
                     key={program._id}
                     hoverable
                     noPadding
+<<<<<<< HEAD
                     className="overflow-hidden rounded-md"
+=======
+                    className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                   >
                     {program.image && (
                       <Card.Image
@@ -284,7 +308,11 @@ export default async function OurWorkPage() {
                       )}
 
                       {program.status && (
+<<<<<<< HEAD
                         <span className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-800">
+=======
+                        <span className="mt-4 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-800">
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                           {program.status}
                         </span>
                       )}
@@ -297,6 +325,10 @@ export default async function OurWorkPage() {
         </Container>
       </section>
 
+<<<<<<< HEAD
+=======
+      {/* PROJECTS SECTION */}
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
       <section
         className={`bg-slate-50 ${sectionClass}`}
         aria-labelledby="projects-title"
@@ -326,7 +358,11 @@ export default async function OurWorkPage() {
                     key={project._id}
                     hoverable
                     noPadding
+<<<<<<< HEAD
                     className="relative overflow-hidden rounded-md"
+=======
+                    className="relative overflow-hidden rounded-2xl shadow-sm ring-1 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                   >
                     {project.image && (
                       <div className="relative">
@@ -337,7 +373,11 @@ export default async function OurWorkPage() {
 
                         {project.status && (
                           <span
+<<<<<<< HEAD
                             className={`absolute right-3 top-3 rounded-full px-3 py-1 text-sm font-semibold ${getProjectStatusClass(
+=======
+                            className={`absolute right-3 top-3 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide shadow-sm ${getProjectStatusClass(
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                               project.status
                             )}`}
                           >
@@ -366,7 +406,11 @@ export default async function OurWorkPage() {
 
                       {!project.image && project.status && (
                         <span
+<<<<<<< HEAD
                           className={`mt-4 inline-flex rounded-full px-3 py-1 text-sm font-semibold ${getProjectStatusClass(
+=======
+                          className={`mt-4 inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide shadow-sm ${getProjectStatusClass(
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                             project.status
                           )}`}
                         >
@@ -382,7 +426,11 @@ export default async function OurWorkPage() {
         </Container>
       </section>
 
+<<<<<<< HEAD
       {/* ===== PROFESSIONAL STATISTICS SECTION (2x2 Grid + Image) ===== */}
+=======
+      {/* PROFESSIONAL STATISTICS SECTION */}
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
       <section
         className="bg-slate-900 py-16 md:py-24"
         aria-labelledby="impact-statistics-title"
@@ -399,12 +447,20 @@ export default async function OurWorkPage() {
           </Heading>
 
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 items-center">
+<<<<<<< HEAD
             {/* Left Side: 4 Stats in 2x2 Grid */}
             <div className="grid grid-cols-2 gap-y-12 gap-x-4">
               {statistics.map((stat, index) => (
                 <div 
                   key={stat.label} 
                   className="border-l-4 border-orange-500 pl-4 md:pl-6 transition-all duration-300 hover:border-orange-400"
+=======
+            <div className="grid grid-cols-2 gap-y-12 gap-x-4">
+              {statistics.map((stat) => (
+                <div 
+                  key={stat.label} 
+                  className="rounded-r-lg border-l-4 border-orange-500 pl-4 md:pl-6 transition-all duration-300 hover:border-orange-400 hover:pl-6 md:hover:pl-8"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                 >
                   <p className="text-4xl font-extrabold text-white md:text-5xl tracking-tight">
                     {stat.value.toLocaleString()}
@@ -416,19 +472,33 @@ export default async function OurWorkPage() {
               ))}
             </div>
 
+<<<<<<< HEAD
             {/* Right Side: Image (Radius changed to rounded-md) */}
             <div className="relative w-full aspect-[4/3] md:aspect-square overflow-hidden rounded-md bg-slate-800 shadow-2xl">
               <img
                 src={heroImageUrl}
                 alt="Impact Statistics Background"
+=======
+            <div className="relative w-full aspect-[4/3] md:aspect-square overflow-hidden rounded-3xl bg-slate-800 shadow-2xl ring-1 ring-white/10">
+              <Image
+                src={heroImageUrl}
+                alt="Impact Statistics Background"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                 className="h-full w-full object-cover"
               />
             </div>
           </div>
         </Container>
       </section>
+<<<<<<< HEAD
       {/* ===== PROFESSIONAL STATISTICS SECTION END ===== */}
 
+=======
+
+      {/* SUCCESS STORIES SECTION */}
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
       <section
         className={`bg-white ${sectionClass}`}
         aria-labelledby="success-stories-title"
@@ -456,7 +526,11 @@ export default async function OurWorkPage() {
                 {publishedStories.map((story) => (
                   <Card
                     key={story._id}
+<<<<<<< HEAD
                     className="flex h-full flex-col justify-between rounded-md"
+=======
+                    className="flex h-full flex-col justify-between rounded-2xl shadow-sm ring-1 ring-slate-100 transition-all duration-300 hover:shadow-lg"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                   >
                     <p
                       className={`${paragraphClass} ${mutedTextClass}`}
@@ -466,12 +540,21 @@ export default async function OurWorkPage() {
 
                     <div className="mt-6 flex items-center gap-4">
                       {story.image && (
+<<<<<<< HEAD
                         <img
                           src={getImageUrl(story.image, 100, 100)}
                           alt={story.title}
                           loading="lazy"
                           decoding="async"
                           className="h-12 w-12 rounded-full object-cover"
+=======
+                        <Image
+                          src={getImageUrl(story.image, 100, 100)}
+                          alt={story.title}
+                          width={48}
+                          height={48}
+                          className="h-12 w-12 rounded-full object-cover ring-2 ring-slate-100"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
                         />
                       )}
 
@@ -494,10 +577,13 @@ export default async function OurWorkPage() {
                 ))}
               </div>
             )}
+<<<<<<< HEAD
+=======
           </div>
         </Container>
       </section>
 
+      {/* FIELD IMAGES SECTION */}
       <section
         className={`bg-slate-50 ${sectionClass}`}
         aria-labelledby="field-images-title"
@@ -524,6 +610,61 @@ export default async function OurWorkPage() {
               {fieldImages.map((item) => (
                 <div
                   key={item.id}
+                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-200 shadow-sm transition-all duration-300 hover:shadow-lg"
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
+          </div>
+        </Container>
+      </section>
+
+<<<<<<< HEAD
+      <section
+        className={`bg-slate-50 ${sectionClass}`}
+        aria-labelledby="field-images-title"
+      >
+        <Container>
+          <Heading
+            id="field-images-title"
+=======
+      {/* PARTNERS SECTION */}
+      <section
+        className={`bg-white ${sectionClass}`}
+        aria-labelledby="partners-title"
+      >
+        <Container>
+          <Heading
+            id="partners-title"
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
+            level={2}
+            size={2}
+            align="center"
+            className="text-brand-dark"
+          >
+<<<<<<< HEAD
+            Real Field Images
+          </Heading>
+
+          <p
+            className={`${paragraphClass} mx-auto mt-4 max-w-2xl text-center ${mutedTextClass}`}
+          >
+            Real YEF community and program activity.
+          </p>
+
+          <div className="mt-10">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {fieldImages.map((item) => (
+                <div
+                  key={item.id}
                   className="group aspect-[4/3] overflow-hidden rounded-xl bg-slate-200"
                 >
                   <img
@@ -536,10 +677,72 @@ export default async function OurWorkPage() {
                 </div>
               ))}
             </div>
+=======
+            Our Partners
+          </Heading>
+
+          <div className="mt-12">
+            {partners.filter((partner) => partner.logo).length === 0 ? (
+              <p
+                className={`${paragraphClass} text-center ${mutedTextClass}`}
+              >
+                No partners have been published yet.
+              </p>
+            ) : (
+              <div className="grid grid-cols-2 items-center justify-items-center gap-8 md:grid-cols-4">
+                {partners
+                  .filter((partner) => partner.logo)
+                  .map((partner) => {
+                    const logoContent = (
+                      <div
+                        className="logo rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                        style={{
+                          width: "170px",
+                          height: "170px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden",
+                          backgroundColor: "white"
+                        }}
+                        title={partner.name}
+                      >
+                        <Image
+                          src={getImageUrl(
+                            partner.logo as SanityImageSource,
+                            240,
+                            120
+                          )}
+                          alt={partner.name}
+                          width={140}
+                          height={140}
+                          className="h-full w-full object-contain p-3"
+                        />
+                      </div>
+                    );
+
+                    return partner.website ? (
+                      <a
+                        key={partner._id}
+                        href={partner.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${partner.name} website`}
+                      >
+                        {logoContent}
+                      </a>
+                    ) : (
+                      <div key={partner._id}>{logoContent}</div>
+                    );
+                  })}
+              </div>
+            )}
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
           </div>
         </Container>
       </section>
 
+<<<<<<< HEAD
       <section
         className={`bg-white ${sectionClass}`}
         aria-labelledby="partners-title"
@@ -616,6 +819,15 @@ export default async function OurWorkPage() {
         aria-labelledby="cta-title"
       >
         <Container>
+=======
+      {/* CTA SECTION */}
+      <section
+        id="support"
+        className="bg-brand-darkest py-16 md:py-24"
+        aria-labelledby="cta-title"
+      >
+        <Container>
+>>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
           <div className="mx-auto max-w-2xl text-center">
             <Heading
               id="cta-title"
@@ -644,6 +856,6 @@ export default async function OurWorkPage() {
           </div>
         </Container>
       </section>
-    </main>
+    </div>
   );
 }
