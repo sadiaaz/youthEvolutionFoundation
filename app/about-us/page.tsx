@@ -23,6 +23,7 @@ interface Person {
   role: string;
   bio?: string;
   image?: any;
+  department?: string;
   linkedin?: string;
 }
 
@@ -157,27 +158,45 @@ export default async function AboutUsPage() {
         </div>
       </Section>
 
-      {/* Team */}
+            {/* Team */}
       <Section background="white" spacing="md">
         <Heading level={2} align="center">
           Our Team
         </Heading>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {team?.map((person) => (
-            <Card key={person._id} hoverable noPadding>
-              {person.image && (
-                <Card.Image
-                  src={urlFor(person.image).width(400).height(400).url()}
-                  alt={person.image?.alt || person.name}
-                />
-              )}
-              <div className="p-4">
-                <Card.Title className="text-base">{person.name}</Card.Title>
-                <p className="mt-1 text-sm text-slate-600">{person.role}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
+        {Object.entries(
+          (team || []).reduce((groups: Record<string, Person[]>, person) => {
+            const dept = (person as any).department || "Team";
+            if (!groups[dept]) groups[dept] = [];
+            groups[dept].push(person);
+            return groups;
+          }, {})
+        ).map(([department, members]) => (
+          <div key={department} className="mt-10">
+            <Heading level={3} align="center" className="mb-6">
+              {department}
+            </Heading>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {members.map((person) => (
+                <Card key={person._id} hoverable noPadding>
+                  {person.image && (
+                    <Card.Image
+                      src={urlFor(person.image).width(400).height(400).url()}
+                      alt={person.image?.alt || person.name}
+                    />
+                  )}
+                  <div className="p-4">
+                    <Card.Title className="text-base">
+                      {person.name}
+                    </Card.Title>
+                    <p className="mt-1 text-sm text-slate-600">
+                      {person.role}
+                    </p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ))}
       </Section>
 
       {/* CTA */}
