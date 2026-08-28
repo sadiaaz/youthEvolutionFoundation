@@ -278,10 +278,7 @@ export default function Home() {
   const [visibleSections, setVisibleSections] = useState<
     Record<string, boolean>
   >({});
-
-  const testimonialTimerRef = useRef<ReturnType<typeof setInterval> | null>(
-    null
-  );
+const testimonialTimerRef = useRef<number | null>(null);
 
   const currentHero = heroSlides[heroIndex];
   const currentTestimonial = testimonials[testimonialIndex];
