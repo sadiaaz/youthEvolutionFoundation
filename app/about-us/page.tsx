@@ -51,11 +51,26 @@ interface PageData {
 
 export async function generateMetadata(): Promise<Metadata> {
   const data: PageData = await client.fetch(aboutPageQuery);
+  const title = data?.about?.seoTitle || "About Us | Youth Evolution Foundation";
+  const description =
+    data?.about?.seoDescription ||
+    "Learn about YEF's mission, vision, and the team empowering youth through education and mentorship.";
+
   return {
-    title: data?.about?.seoTitle || "About Us | Youth Evolution Foundation",
-    description:
-      data?.about?.seoDescription ||
-      "Learn about YEF's mission, vision, and the team empowering youth through education and mentorship.",
+    title,
+    description,
+    openGraph: {
+      title,
+      description, 
+      type: "website",
+      url: "/about-us",
+      siteName: "Youth Evolution Foundation",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
