@@ -1,8 +1,7 @@
 import Link from "next/link";
-<<<<<<< HEAD
-=======
+
 import Image from "next/image";
->>>>>>> 40057e1bc7cf2dd606f9db321f6f2fdac9ec33fd
+
 import { Container } from "@/components/Container";
 import { Heading } from "@/components/Heading";
 import { Card } from "@/components/Card";
