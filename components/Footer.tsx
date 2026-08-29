@@ -54,6 +54,7 @@ const SOCIAL_LINKS = [
   { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61571368734643", Icon: FacebookIcon },
   { label: "Instagram", href: "https://www.instagram.com/youthevolutionfoundation?igsh=MWFqZHpjeDhkdXE2Yg%3D%3D", Icon: InstagramIcon },
   { label: "LinkedIn", href: "https://www.linkedin.com/company/youth-evolution-foundation/", Icon: LinkedinIcon },
+  { label: "YouTube", href: "https://www.youtube.com/@YouthEvolutionFoundation", Icon: YoutubeIcon },
 ];
 
 export default function Footer() {
@@ -68,6 +69,7 @@ export default function Footer() {
       "https://www.facebook.com/profile.php?id=61571368734643",
       "https://www.instagram.com/youthevolutionfoundation?igsh=MWFqZHpjeDhkdXE2Yg%3D%3D",
       "https://www.linkedin.com/company/youth-evolution-foundation/",
+      "https://www.youtube.com/@YouthEvolutionFoundation",
     ],
     "telephone": "+923304837558",
     "email": "universityrelations.yef@gmail.com",
