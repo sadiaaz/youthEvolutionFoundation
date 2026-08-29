@@ -41,6 +41,22 @@ export default defineType({
       type: 'array',
       of: [{ type: 'block' }],
     }),
+        defineField({
+      name: 'storyImage',
+      title: 'Our Story - Image',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+    }),
+
+  
     defineField({
       name: 'mission',
       title: 'Mission Statement',

@@ -7,6 +7,7 @@ export const aboutPageQuery = groq`{
     heroImage,
     storyTitle,
     storyContent,
+    storyImage,
     mission,
     vision,
     ctaTitle,
