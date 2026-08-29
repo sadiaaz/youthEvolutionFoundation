@@ -574,30 +574,26 @@ export default async function OurWorkPage() {
                   .filter((partner) => partner.logo)
                   .map((partner) => {
                     const logoContent = (
-                      <div
-                        className="logo rounded-2xl border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
-                        style={{
-                          width: "170px",
-                          height: "170px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          overflow: "hidden",
-                          backgroundColor: "white"
-                        }}
-                        title={partner.name}
-                      >
-                        <Image
-                          src={getImageUrl(
-                            partner.logo as SanityImageSource,
-                            240,
-                            120
-                          )}
-                          alt={partner.name}
-                          width={140}
-                          height={140}
-                          className="h-full w-full object-contain p-3"
-                        />
+                      <div className="flex flex-col items-center group text-center">
+                        <div
+                          className="relative flex h-36 w-36 sm:h-40 sm:w-40 md:h-44 md:w-44 items-center justify-center rounded-full bg-white p-5 border-2 border-slate-100 shadow-md ring-4 ring-slate-50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-orange-500 group-hover:ring-orange-50"
+                          title={partner.name}
+                        >
+                          <Image
+                            src={getImageUrl(
+                              partner.logo as SanityImageSource,
+                              300,
+                              300
+                            )}
+                            alt={partner.name}
+                            width={160}
+                            height={160}
+                            className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                        <p className="mt-3 text-sm font-semibold text-brand-dark transition-colors duration-200 group-hover:text-orange-600">
+                          {partner.name}
+                        </p>
                       </div>
                     );
 
@@ -608,6 +604,7 @@ export default async function OurWorkPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Visit ${partner.name} website`}
+                        className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
                       >
                         {logoContent}
                       </a>

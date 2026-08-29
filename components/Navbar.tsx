@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
-  Phone, 
   MessageCircle, 
   HandHeart, 
   Heart, 
@@ -18,22 +17,17 @@ interface NavLink {
   title: string;
 }
 
+// Only pages that actually exist in the project — extra pages removed per Sadia's instruction
 const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/", title: "Youth Evolution Foundation Home" },
   { label: "About", href: "/about-us", title: "About Youth Evolution Foundation" },
   { label: "Our Work", href: "/our-work", title: "Our Work in Evolution Foundation" },
-  { label: "Programs", href: "/programs", title: "Our Programs and Welfare Projects" },
-  { label: "Events", href: "/events", title: "Upcoming Foundation Events" },
-  { label: "News", href: "/news", title: "Latest News and Updates" },
-  { label: "Get Involved", href: "/get-involved", title: "Get Involved and Support Us" },
-  { label: "Contact", href: "/contact", title: "Contact Youth Evolution Foundation" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
 
-  // JSON-LD SiteNavigationElement for SEO schema markup
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "SiteNavigationElement",
@@ -43,7 +37,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Schema.org Structured Data Injection */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -54,10 +47,6 @@ export default function Navbar() {
         <div className="bg-[#1e3a8a] text-white text-xs sm:text-sm py-2 px-4 sm:px-8">
           <address className="not-italic flex flex-wrap justify-between items-center gap-2 max-w-7xl mx-auto">
             <div className="flex items-center gap-4 sm:gap-6">
-              <div className="flex items-center gap-1.5 font-semibold">
-                
-            
-              </div>
               <a
                 href="https://wa.me/923000000000"
                 target="_blank"
@@ -89,7 +78,7 @@ export default function Navbar() {
           aria-label="Main Navigation"
         >
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-            {/* Brand Logo */}
+            {/* Brand Logo — text-based placeholder until official logo file is provided */}
             <Link 
               href="/" 
               className="flex items-center gap-3 group"
