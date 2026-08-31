@@ -149,29 +149,46 @@ export default async function AboutUsPage() {
         <SectionHeading align="left">
           {about?.storyTitle || "Our Story"}
         </SectionHeading>
-        <div className="mt-8">
-          <div className="prose prose-lg prose-slate max-w-3xl">
+        {about?.storyImage ? (
+          <div className="relative mt-8 overflow-hidden rounded-2xl">
+            <img
+              src={urlFor(about.storyImage).width(1600).height(900).url()}
+              alt={
+                about.storyImage?.alt ||
+                "Youth Evolution Foundation community activity"
+              }
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-950/60 to-blue-950/10" />
+            <div className="relative px-6 py-12 sm:px-12 sm:py-16">
+              <div className="prose prose-lg prose-invert max-w-2xl">
+                {about?.storyContent && (
+                  <PortableText value={about.storyContent} />
+                )}
+              </div>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <div className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 backdrop-blur-sm">
+                  <p className="text-2xl font-bold text-white">2025</p>
+                  <p className="text-xs font-medium text-blue-100">
+                    Year Founded
+                  </p>
+                </div>
+                <div className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 backdrop-blur-sm">
+                  <p className="text-2xl font-bold text-white">Pakistan</p>
+                  <p className="text-xs font-medium text-blue-100">
+                    Nationwide Reach
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-8 prose prose-lg prose-slate max-w-3xl">
             {about?.storyContent && (
               <PortableText value={about.storyContent} />
             )}
           </div>
-          {about?.storyImage && (
-            <div className="relative mt-10 mb-6 sm:mb-0">
-              <img
-                src={urlFor(about.storyImage).width(1200).height(600).url()}
-                alt={
-                  about.storyImage?.alt ||
-                  "Youth Evolution Foundation community activity"
-                }
-                className="w-full max-h-[420px] rounded-2xl object-cover shadow-lg"
-              />
-              <div className="absolute -bottom-6 left-6 hidden rounded-xl bg-white p-4 shadow-lg sm:block">
-                <p className="text-2xl font-bold text-blue-900">2025</p>
-                <p className="text-sm text-slate-600">Year Founded</p>
-              </div>
-            </div>
-          )}
-        </div>
+        )}
       </Section>
 
       {/* Mission & Vision */}
@@ -206,18 +223,24 @@ export default async function AboutUsPage() {
       <Section background="white" spacing="lg">
         <SectionHeading>Core Values</SectionHeading>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {values?.map((value) => (
+          {values?.map((value, index) => (
             <Card
               key={value._id}
               hoverable
-              className="text-center transition-transform duration-200 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-600"
+              className="relative overflow-hidden text-center transition-transform duration-200 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-600"
             >
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
+              <span
+                className="absolute -top-2 -right-2 text-6xl font-black text-blue-50"
+                aria-hidden="true"
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-teal-100">
                 {value.icon ? (
                   <img
-                    src={urlFor(value.icon).width(32).height(32).url()}
+                    src={urlFor(value.icon).width(36).height(36).url()}
                     alt=""
-                    className="h-7 w-7 object-contain"
+                    className="h-8 w-8 object-contain"
                   />
                 ) : (
                   <span
@@ -226,10 +249,12 @@ export default async function AboutUsPage() {
                   />
                 )}
               </div>
-              <Card.Title className="text-blue-950">
+              <Card.Title className="relative text-blue-950">
                 {value.title}
               </Card.Title>
-              <Card.Description>{value.description}</Card.Description>
+              <Card.Description className="relative">
+                {value.description}
+              </Card.Description>
             </Card>
           ))}
         </div>
