@@ -105,12 +105,23 @@ function Initials({ name }: { name: string }) {
     .slice(0, 2)
     .toUpperCase();
   return (
-    <div
-      className="flex aspect-square w-full items-center justify-center rounded-t-xl bg-blue-50"
+    <div className="flex justify-center pt-6" aria-hidden="true">
+      <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-teal-100 ring-4 ring-white shadow">
+        <span className="text-xl font-bold text-blue-800">{initials}</span>
+      </div>
+    </div>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-4 w-4 fill-current"
       aria-hidden="true"
     >
-      <span className="text-3xl font-bold text-blue-800">{initials}</span>
-    </div>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z" />
+    </svg>
   );
 }
 
@@ -325,13 +336,20 @@ export default async function AboutUsPage() {
                   noPadding
                   className="transition-transform duration-200 hover:-translate-y-1"
                 >
-                  {person.image ? (
-                    <Card.Image
-                      src={urlFor(person.image).width(400).height(400).url()}
-                      alt={
-                        person.image?.alt || `${person.name}, ${person.role}`
-                      }
-                    />
+                                    {person.image ? (
+                    <div className="flex justify-center pt-6">
+                      <img
+                        src={urlFor(person.image)
+                          .width(200)
+                          .height(200)
+                          .url()}
+                        alt={
+                          person.image?.alt ||
+                          `${person.name}, ${person.role}`
+                        }
+                        className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow"
+                      />
+                    </div>
                   ) : (
                     <Initials name={person.name} />
                   )}
@@ -342,6 +360,17 @@ export default async function AboutUsPage() {
                     <p className="mt-1 text-sm text-slate-600">
                       {person.role}
                     </p>
+                    {person.linkedin && (
+                      
+                       <a href={person.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-flex items-center justify-center gap-1 text-xs font-medium text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded"
+                      >
+                        <LinkedInIcon />
+                        {person.name.split(" ")[0]}&apos;s LinkedIn
+                      </a>
+                    )}
                   </div>
                 </Card>
               ))}
