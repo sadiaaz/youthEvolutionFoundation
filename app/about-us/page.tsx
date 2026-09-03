@@ -35,7 +35,9 @@ interface AboutData {
   storyContent?: any;
   storyImage?: any;
   mission: string;
+  missionImage?: any;
   vision: string;
+  visionImage?: any;
   ctaTitle?: string;
   ctaButtonText?: string;
   ctaButtonLink?: string;
@@ -155,230 +157,333 @@ export default async function AboutUsPage() {
         )}
       </Section>
 
-      {/* Our Story */}
-      <Section background="white" spacing="md">
-        <SectionHeading align="left">
-          {about?.storyTitle || "Our Story"}
-        </SectionHeading>
-        {about?.storyImage ? (
-          <div className="relative mt-8 overflow-hidden rounded-2xl">
-            <img
-              src={urlFor(about.storyImage).width(1600).height(900).url()}
-              alt={
-                about.storyImage?.alt ||
-                "Youth Evolution Foundation community activity"
-              }
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-950/60 to-blue-950/10" />
-            <div className="relative px-6 py-12 sm:px-12 sm:py-16">
-              <div className="prose prose-lg prose-invert max-w-2xl">
+      {/* Our Story - editorial style */}
+      <section className="relative overflow-hidden bg-white py-10 sm:py-14">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-0">
+            {/* Vertical side label (desktop only) */}
+            <div className="hidden lg:flex absolute -left-6 top-0 h-full items-center">
+              <span className="[writing-mode:vertical-rl] rotate-180 font-serif italic text-sm tracking-widest text-slate-400">
+                founded with purpose — growing together
+              </span>
+            </div>
+
+            {/* Text block — overlaps the image on desktop */}
+            <div className="relative z-10 bg-white px-2 py-6 lg:-mr-24 lg:py-16 lg:pl-16 lg:pr-20">
+              <span className="mb-4 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em] text-teal-600">
+                <span className="text-orange-400">×</span> Our Story
+              </span>
+              <h2 className="font-serif text-4xl leading-tight tracking-wide text-blue-950 sm:text-5xl">
+                {about?.storyTitle || "Our Story"}
+              </h2>
+              <div className="mt-6 h-px w-16 bg-orange-400" />
+              <div className="mt-8 max-w-md space-y-5 font-serif text-[15px] leading-8 text-slate-600">
                 {about?.storyContent && (
                   <PortableText value={about.storyContent} />
                 )}
               </div>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <div className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 backdrop-blur-sm">
-                  <p className="text-2xl font-bold text-white">2025</p>
-                  <p className="text-xs font-medium text-blue-100">
-                    Year Founded
-                  </p>
-                </div>
-                <div className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 backdrop-blur-sm">
-                  <p className="text-2xl font-bold text-white">Pakistan</p>
-                  <p className="text-xs font-medium text-blue-100">
-                    Nationwide Reach
-                  </p>
-                </div>
-              </div>
             </div>
-          </div>
-        ) : (
-          <div className="mt-8 prose prose-lg prose-slate max-w-3xl">
-            {about?.storyContent && (
-              <PortableText value={about.storyContent} />
+
+            {/* Background story image */}
+            {about?.storyImage && (
+              <div className="relative lg:col-start-2">
+                <img
+                  src={urlFor(about.storyImage).width(1000).height(1200).url()}
+                  alt={
+                    about.storyImage?.alt || "Youth Evolution Foundation story"
+                  }
+                  className="h-[420px] w-full object-cover shadow-xl sm:h-[520px] lg:h-[620px]"
+                />
+              </div>
             )}
           </div>
-        )}
-      </Section>
-
-      {/* Mission & Vision */}
-      <Section background="light" spacing="lg">
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card className="border-t-4 border-t-blue-700">
-            <span className="text-xs font-semibold uppercase tracking-widest text-teal-600">
-              Our Mission
-            </span>
-            <Heading level={3} className="mt-2 text-blue-950">
-              Mission
-            </Heading>
-            <p className="mt-3 text-slate-600 leading-relaxed">
-              {about?.mission}
-            </p>
-          </Card>
-          <Card className="border-t-4 border-t-teal-500">
-            <span className="text-xs font-semibold uppercase tracking-widest text-teal-600">
-              Our Vision
-            </span>
-            <Heading level={3} className="mt-2 text-blue-950">
-              Vision
-            </Heading>
-            <p className="mt-3 text-slate-600 leading-relaxed">
-              {about?.vision}
-            </p>
-          </Card>
         </div>
-      </Section>
+      </section>
 
-      {/* Core Values */}
-      <Section background="white" spacing="lg">
-        <SectionHeading>Core Values</SectionHeading>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {values?.map((value, index) => (
-            <Card
-              key={value._id}
-              hoverable
-              className="relative overflow-hidden text-center transition-transform duration-200 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-600"
-            >
-              <span
-                className="absolute -top-2 -right-2 text-6xl font-black text-blue-50"
-                aria-hidden="true"
+      {/* Mission & Vision - blob style */}
+<section className="bg-slate-50 py-16 sm:py-24">
+  <div className="mx-auto max-w-7xl px-6">
+    <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
+      {/* Mission */}
+      <div>
+        <div className="relative mb-8 h-40 w-40">
+          {/* decorative background blob - slightly bigger, offset */}
+          <div
+            className="absolute -inset-3 rounded-[58%_42%_38%_62%/42%_58%_62%_38%] bg-teal-100"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 overflow-hidden rounded-[60%_40%_55%_45%/45%_55%_40%_60%] shadow-md">
+            {about?.missionImage ? (
+              <img
+                src={urlFor(about.missionImage).width(400).height(400).url()}
+                alt={about.missionImage?.alt || "Our Mission"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-teal-50">
+                <span className="h-3 w-3 rounded-full bg-teal-500" />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <h3 className="font-serif text-3xl text-blue-950 sm:text-4xl">
+          Our Mission
+        </h3>
+        <div className="mt-4 h-1 w-12 rounded-full bg-orange-400" />
+        <p className="mt-6 max-w-md text-slate-600 leading-relaxed">
+          {about?.mission}
+        </p>
+      </div>
+
+      {/* Vision */}
+      <div>
+        <div className="relative mb-8 h-40 w-40">
+          <div
+            className="absolute -inset-3 rounded-[42%_58%_62%_38%/58%_42%_38%_62%] bg-orange-100"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 overflow-hidden rounded-[45%_55%_40%_60%/60%_40%_55%_45%] shadow-md">
+            {about?.visionImage ? (
+              <img
+                src={urlFor(about.visionImage).width(400).height(400).url()}
+                alt={about.visionImage?.alt || "Our Vision"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-orange-50">
+                <span className="h-3 w-3 rounded-full bg-orange-400" />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <h3 className="font-serif text-3xl text-blue-950 sm:text-4xl">
+          Our Vision
+        </h3>
+        <div className="mt-4 h-1 w-12 rounded-full bg-teal-500" />
+        <p className="mt-6 max-w-md text-slate-600 leading-relaxed">
+          {about?.vision}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+      {/* Core Values - enhanced */}
+<section className="bg-white py-16 sm:py-24">
+  <div className="mx-auto max-w-6xl px-6">
+    <div className="mb-16 text-center">
+      <span className="text-sm font-semibold uppercase tracking-[0.3em] text-teal-600">
+        What We Stand For
+      </span>
+      <h2 className="mt-3 font-serif text-4xl text-blue-800 sm:text-5xl">
+        Core Values
+      </h2>
+      <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-orange-400" />
+    </div>
+
+    <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2">
+      {values?.map((value, index) => {
+        const styles = [
+          { bg: "bg-teal-50", ring: "ring-teal-100", accent: "bg-teal-500", radius: "60% 40% 55% 45% / 45% 55% 40% 60%" },
+          { bg: "bg-orange-50", ring: "ring-orange-100", accent: "bg-orange-400", radius: "45% 55% 40% 60% / 60% 40% 55% 45%" },
+          { bg: "bg-blue-50", ring: "ring-blue-100", accent: "bg-blue-800", radius: "55% 45% 60% 40% / 40% 60% 45% 55%" },
+          { bg: "bg-teal-50", ring: "ring-teal-100", accent: "bg-teal-500", radius: "42% 58% 62% 38% / 58% 42% 38% 62%" },
+        ];
+        const s = styles[index % styles.length];
+
+        return (
+          <div
+            key={value._id}
+            className="group flex gap-6 rounded-2xl p-6 transition-colors duration-200 hover:bg-slate-50"
+          >
+            {/* Icon blob */}
+            <div className="flex-shrink-0">
+              <div
+                className={`flex h-16 w-16 items-center justify-center ${s.bg} ring-1 ${s.ring} transition-transform duration-200 group-hover:scale-105`}
+                style={{ borderRadius: s.radius }}
               >
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <div className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-teal-100">
                 {value.icon ? (
                   <img
-                    src={urlFor(value.icon).width(36).height(36).url()}
+                    src={urlFor(value.icon).width(30).height(30).url()}
                     alt=""
-                    className="h-8 w-8 object-contain"
+                    className="h-7 w-7 object-contain"
                   />
                 ) : (
-                  <span
-                    className="h-3 w-3 rounded-full bg-teal-500"
-                    aria-hidden="true"
-                  />
+                  <span className={`h-2.5 w-2.5 rounded-full ${s.accent}`} />
                 )}
               </div>
-              <Card.Title className="relative text-blue-950">
-                {value.title}
-              </Card.Title>
-              <Card.Description className="relative">
-                {value.description}
-              </Card.Description>
-            </Card>
-          ))}
-        </div>
-      </Section>
+            </div>
 
-      {/* Leadership */}
-      <Section background="light" spacing="lg">
-        <SectionHeading>Leadership</SectionHeading>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {leadership?.map((person) => (
-            <Card
-              key={person._id}
-              hoverable
-              noPadding
-              className="bg-white transition-transform duration-200 hover:-translate-y-1"
+            {/* Text */}
+            <div>
+              <h3 className="font-serif text-xl text-blue-800">
+                {value.title}
+              </h3>
+              <div className={`mt-2 h-0.5 w-8 rounded-full ${s.accent}`} />
+              <p className="mt-3 leading-relaxed text-slate-600">
+                {value.description}
+              </p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+     {/* Leadership */}
+<section className="bg-slate-50 py-16 sm:py-24">
+  <div className="mx-auto max-w-7xl px-6">
+    <div className="mb-14 text-center">
+      <span className="text-sm font-semibold uppercase tracking-[0.3em] text-teal-600">
+        Meet The Team
+      </span>
+      <h2 className="mt-3 font-serif text-4xl text-blue-800 sm:text-5xl">
+        Leadership
+      </h2>
+      <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-orange-400" />
+    </div>
+
+    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {leadership?.map((person) => (
+        <div
+          key={person._id}
+          className="group rounded-2xl bg-white p-8 text-center shadow-sm transition-shadow duration-200 hover:shadow-lg"
+        >
+          <div className="mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full ring-4 ring-white shadow-md">
+            {person.image ? (
+              <img
+                src={urlFor(person.image).width(300).height(300).url()}
+                alt={person.image?.alt || `${person.name}, ${person.role}`}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50">
+                <span className="text-lg font-bold text-blue-800">
+                  {person.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <h3 className="font-serif text-xl text-blue-800">
+            {person.name}
+          </h3>
+          <p className="mt-1 text-sm font-medium text-orange-500">
+            {person.role}
+          </p>
+          <div className="mx-auto mt-3 h-px w-8 bg-slate-200" />
+          {person.bio && (
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">
+              {person.bio}
+            </p>
+          )}
+          {person.linkedin && (
+            
+              <a href={person.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-800 hover:underline"
             >
-              {person.image ? (
-                <Card.Image
-                  src={urlFor(person.image).width(600).height(340).url()}
-                  alt={person.image?.alt || `${person.name}, ${person.role}`}
-                />
-              ) : (
-                <Initials name={person.name} />
-              )}
-              <div className="p-5 sm:p-6">
-                <Card.Title className="text-blue-950">
+              {person.name.split(" ")[0]}&apos;s LinkedIn profile
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+      {/* Team */}
+<section className="bg-white py-16 sm:py-24">
+  <div className="mx-auto max-w-7xl px-6">
+    <div className="mb-16 text-center">
+      <span className="text-sm font-semibold uppercase tracking-[0.3em] text-teal-600">
+        The People Behind YEF
+      </span>
+      <h2 className="mt-3 font-serif text-4xl text-blue-800 sm:text-5xl">
+        Our Team
+      </h2>
+      <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-orange-400" />
+    </div>
+
+    {groupedTeam.map(([department, members], deptIndex) => {
+      const accents = ["bg-teal-500", "bg-orange-400", "bg-blue-800"];
+      const accent = accents[deptIndex % accents.length];
+
+      return (
+        <section
+          key={department}
+          className="mt-16 first:mt-0"
+          aria-label={department}
+        >
+          {/* Department label */}
+          <div className="mb-10 flex items-center justify-center gap-4">
+            <span className={`h-2 w-2 rounded-full ${accent}`} />
+            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-blue-800">
+              {department}
+            </h3>
+            <span className={`h-2 w-2 rounded-full ${accent}`} />
+          </div>
+
+          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            {members.map((person) => (
+              <div key={person._id} className="group text-center">
+                <div className="relative mx-auto mb-5 h-28 w-28">
+                  <div
+                    className={`absolute -inset-1 rounded-full ${accent} opacity-0 transition-opacity duration-300 group-hover:opacity-15`}
+                  />
+                  <div className="relative h-full w-full overflow-hidden rounded-full shadow-md ring-4 ring-white">
+                    {person.image ? (
+                      <img
+                        src={urlFor(person.image).width(250).height(250).url()}
+                        alt={
+                          person.image?.alt || `${person.name}, ${person.role}`
+                        }
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50">
+                        <span className="text-lg font-bold text-blue-800">
+                          {person.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <h4 className="font-serif text-base text-blue-800">
                   {person.name}
-                </Card.Title>
-                <p className="mt-1 text-sm font-medium text-teal-600">
-                  {person.role}
-                </p>
-                {person.bio && (
-                  <Card.Description>{person.bio}</Card.Description>
-                )}
+                </h4>
+                <p className="mt-1 text-sm text-slate-500">{person.role}</p>
                 {person.linkedin && (
                   
                     <a href={person.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-block text-sm font-medium text-blue-700 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded"
+                    className="mt-2 inline-flex items-center justify-center gap-1 text-xs font-medium text-blue-800 opacity-0 transition-opacity duration-200 hover:underline group-hover:opacity-100"
                   >
-                    {person.name.split(" ")[0]}&apos;s LinkedIn profile
+                    <LinkedInIcon />
+                    LinkedIn
                   </a>
                 )}
               </div>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      {/* Team */}
-      <Section background="white" spacing="lg">
-        <SectionHeading>Our Team</SectionHeading>
-        {groupedTeam.map(([department, members]) => (
-          <section
-            key={department}
-            className="mt-12 first:mt-10"
-            aria-label={department}
-          >
-            <h3 className="mb-6 text-center text-sm font-semibold uppercase tracking-widest text-teal-600">
-              {department}
-            </h3>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {members.map((person) => (
-                <Card
-                  key={person._id}
-                  hoverable
-                  noPadding
-                  className="transition-transform duration-200 hover:-translate-y-1"
-                >
-                                    {person.image ? (
-                    <div className="flex justify-center pt-6">
-                      <img
-                        src={urlFor(person.image)
-                          .width(200)
-                          .height(200)
-                          .url()}
-                        alt={
-                          person.image?.alt ||
-                          `${person.name}, ${person.role}`
-                        }
-                        className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow"
-                      />
-                    </div>
-                  ) : (
-                    <Initials name={person.name} />
-                  )}
-                  <div className="p-4 text-center">
-                    <Card.Title className="text-base text-blue-950">
-                      {person.name}
-                    </Card.Title>
-                    <p className="mt-1 text-sm text-slate-600">
-                      {person.role}
-                    </p>
-                    {person.linkedin && (
-                      
-                       <a href={person.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-2 inline-flex items-center justify-center gap-1 text-xs font-medium text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded"
-                      >
-                        <LinkedInIcon />
-                        {person.name.split(" ")[0]}&apos;s LinkedIn
-                      </a>
-                    )}
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </section>
-        ))}
-      </Section>
-
+            ))}
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</section>
       {/* CTA */}
       <Section background="dark" spacing="lg">
         <span className="block text-center text-sm font-semibold uppercase tracking-widest text-teal-400">
