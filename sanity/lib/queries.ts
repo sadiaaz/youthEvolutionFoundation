@@ -7,8 +7,11 @@ export const aboutPageQuery = groq`{
     heroImage,
     storyTitle,
     storyContent,
+    storyImage,
     mission,
+    missionImage,
     vision,
+    visionImage,
     ctaTitle,
     ctaButtonText,
     ctaButtonLink,
@@ -29,10 +32,11 @@ export const aboutPageQuery = groq`{
     image,
     linkedin
   },
-  "team": *[_type == "team"] | order(order asc){
+    "team": *[_type == "team"] | order(order asc){
     _id,
     name,
     role,
+    department,
     image,
     linkedin
   }

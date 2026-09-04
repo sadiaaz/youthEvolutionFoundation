@@ -42,10 +42,38 @@ export default defineType({
       of: [{ type: 'block' }],
     }),
     defineField({
+      name: 'storyImage',
+      title: 'Our Story - Image',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+    }),
+
+    defineField({
       name: 'mission',
       title: 'Mission Statement',
       type: 'text',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'missionImage',
+      title: 'Mission Image',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        }),
+      ],
     }),
     defineField({
       name: 'vision',
@@ -53,6 +81,20 @@ export default defineType({
       type: 'text',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'visionImage',
+      title: 'Vision Image',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        }),
+      ],
+    }),
+
     defineField({
       name: 'ctaTitle',
       title: 'CTA Title',
