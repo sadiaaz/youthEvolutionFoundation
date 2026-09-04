@@ -399,8 +399,15 @@ export default async function AboutUsPage() {
   </div>
 </section>
       {/* Team */}
-<section className="bg-white py-16 sm:py-24">
-  <div className="mx-auto max-w-7xl px-6">
+<section className="relative overflow-hidden bg-white py-16 sm:py-24">
+  {/* Decorative background circles - subtle, brand colors */}
+  <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-blue-800/5 blur-3xl" />
+    <div className="absolute -right-32 top-1/3 h-96 w-96 rounded-full bg-teal-500/5 blur-3xl" />
+    <div className="absolute -bottom-24 left-1/4 h-80 w-80 rounded-full bg-orange-400/5 blur-3xl" />
+  </div>
+
+  <div className="relative mx-auto max-w-7xl px-6">
     <div className="mb-16 text-center">
       <span className="text-sm font-semibold uppercase tracking-[0.3em] text-teal-600">
         The People Behind YEF
@@ -411,77 +418,84 @@ export default async function AboutUsPage() {
       <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-orange-400" />
     </div>
 
-    {groupedTeam.map(([department, members], deptIndex) => {
-      const accents = ["bg-teal-500", "bg-orange-400", "bg-blue-800"];
-      const accent = accents[deptIndex % accents.length];
+    {[...groupedTeam]
+      .sort((a, b) => b[1].length - a[1].length)
+      .map(([department, members], deptIndex) => {
+        const accents = ["bg-teal-500", "bg-orange-400", "bg-blue-800"];
+        const accent = accents[deptIndex % accents.length];
 
-      return (
-        <section
-          key={department}
-          className="mt-16 first:mt-0"
-          aria-label={department}
-        >
-          {/* Department label */}
-          <div className="mb-10 flex items-center justify-center gap-4">
-            <span className={`h-2 w-2 rounded-full ${accent}`} />
-            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-blue-800">
-              {department}
-            </h3>
-            <span className={`h-2 w-2 rounded-full ${accent}`} />
-          </div>
+        return (
+          <section
+            key={department}
+            className="mt-16 first:mt-0"
+            aria-label={department}
+          >
+            <div className="mb-10 flex items-center justify-center gap-4">
+              <span className={`h-2 w-2 rounded-full ${accent}`} />
+              <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-blue-800">
+                {department}
+              </h3>
+              <span className={`h-2 w-2 rounded-full ${accent}`} />
+            </div>
 
-          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            {members.map((person) => (
-              <div key={person._id} className="group text-center">
-                <div className="relative mx-auto mb-5 h-28 w-28">
-                  <div
-                    className={`absolute -inset-1 rounded-full ${accent} opacity-0 transition-opacity duration-300 group-hover:opacity-15`}
-                  />
-                  <div className="relative h-full w-full overflow-hidden rounded-full shadow-md ring-4 ring-white">
-                    {person.image ? (
-                      <img
-                        src={urlFor(person.image).width(250).height(250).url()}
-                        alt={
-                          person.image?.alt || `${person.name}, ${person.role}`
-                        }
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50">
-                        <span className="text-lg font-bold text-blue-800">
-                          {person.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .slice(0, 2)
-                            .toUpperCase()}
-                        </span>
-                      </div>
-                    )}
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-10">
+              {members.map((person) => (
+                <div
+                  key={person._id}
+                  className="group w-40 text-center sm:w-44"
+                >
+                  <div className="relative mx-auto mb-5 h-24 w-24">
+                    <div
+                      className={`absolute -inset-1 rounded-full ${accent} opacity-0 transition-opacity duration-300 group-hover:opacity-15`}
+                    />
+                    <div className="relative h-full w-full overflow-hidden rounded-full shadow-md ring-4 ring-white">
+                      {person.image ? (
+                        <img
+                          src={urlFor(person.image).width(250).height(250).url()}
+                          alt={
+                            person.image?.alt ||
+                            `${person.name}, ${person.role}`
+                          }
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 to-teal-50">
+                          <span className="text-lg font-bold text-blue-800">
+                            {person.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <h4 className="font-serif text-base text-blue-800">
-                  {person.name}
-                </h4>
-                <p className="mt-1 text-sm text-slate-500">{person.role}</p>
-                {person.linkedin && (
-                  
-                    <a href={person.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center justify-center gap-1 text-xs font-medium text-blue-800 opacity-0 transition-opacity duration-200 hover:underline group-hover:opacity-100"
-                  >
-                    <LinkedInIcon />
-                    LinkedIn
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      );
-    })}
+                  <h4 className="font-serif text-base text-blue-800">
+                    {person.name}
+                  </h4>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {person.role}
+                  </p>
+                  {person.linkedin && (
+                    
+                      <a href={person.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center justify-center gap-1 text-xs font-medium text-blue-800 opacity-0 transition-opacity duration-200 hover:underline group-hover:opacity-100"
+                    >
+                      <LinkedInIcon />
+                      LinkedIn
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })}
   </div>
 </section>
       {/* CTA */}
