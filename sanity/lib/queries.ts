@@ -5,6 +5,7 @@ export const aboutPageQuery = groq`{
     heroTitle,
     heroSubtitle,
     heroImage,
+    heroSlides[]{ image, alt },
     storyTitle,
     storyContent,
     storyImage,
