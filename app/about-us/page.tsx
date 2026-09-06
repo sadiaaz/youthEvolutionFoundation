@@ -5,6 +5,7 @@ import { PortableText } from "@portabletext/react";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { aboutPageQuery } from "@/sanity/lib/queries";
+
 import { Section } from "@/components/Section";
 import { Heading } from "@/components/Heading";
 import { Card } from "@/components/Card";
