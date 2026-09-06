@@ -31,6 +31,36 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'heroSlides',
+      title: 'Hero Slider Images',
+      description: 'Add multiple images to create a slider in the hero section',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'image',
+              title: 'Slide Image',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {
+            select: { media: 'image', title: 'alt' },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.min(1),
+    }),
+    defineField({
       name: 'storyTitle',
       title: 'Our Story - Title',
       type: 'string',
