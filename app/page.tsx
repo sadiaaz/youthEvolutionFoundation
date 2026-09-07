@@ -60,7 +60,11 @@ export default function Home() {
 
 
 import Home from "./home/home";
+import { client } from "@/sanity/lib/client";
+import { testimonialsQuery } from "@/sanity/lib/queries";
 
-export default function Page() {
-  return <Home />;
+export default async function Page() {
+  const testimonials = await client.fetch(testimonialsQuery);
+
+  return <Home testimonials={testimonials} />;
 }

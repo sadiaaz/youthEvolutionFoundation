@@ -8,7 +8,18 @@ import about from './about'
 import value from './values'
 import leadership from './leadership'
 import team from './team'
+import testimonial from './testimonial'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [program, project, impactStory, partner, about, value, leadership, team],
+  types: [
+    program,
+    project,
+    impactStory,
+    partner,
+    about,
+    value,
+    leadership,
+    team,
+    testimonial,
+  ],
 }

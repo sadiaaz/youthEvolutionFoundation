@@ -1,6 +1,9 @@
 "use client";
-import './home.css'
+
+import "./home.css";
 import React, { useEffect, useRef, useState } from "react";
+import { urlFor } from "../../sanity/lib/image";
+import type { SanityImageSource } from "@sanity/image-url";
 
 const heroSlides = [
   {
@@ -66,6 +69,7 @@ const partnerLogos = [
     image: "/logos/hbl.png",
   },
 ];
+
 const programs = [
   {
     number: "02",
@@ -117,40 +121,21 @@ const events = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Ayesha Khan",
-    role: "YEF Program Participant",
-    quote:
-      "YEF gave me more than skills. It gave me the confidence to believe I could create change in my community.",
-    image:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=500&q=90",
-  },
-  {
-    name: "Hassan Ahmed",
-    role: "Leadership Program Graduate",
-    quote:
-      "The mentorship I received at YEF completely changed the way I see my future. I now feel prepared to lead and make a difference.",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=90",
-  },
-  {
-    name: "Maham Ali",
-    role: "Skills Development Participant",
-    quote:
-      "I learned practical skills, met inspiring people, and discovered confidence I never knew I had. YEF helped me take the next step.",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=500&q=90",
-  },
-  {
-    name: "Bilal Raza",
-    role: "Community Volunteer",
-    quote:
-      "Being part of YEF showed me that young people can create real change when we have the right support, opportunity, and community.",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=90",
-  },
-];
+/* =========================================================
+   SANITY TESTIMONIAL TYPE
+   ========================================================= */
+
+type Testimonial = {
+  _id: string;
+  name: string;
+  role: string;
+  quote: string;
+  image?: SanityImageSource;
+};
+
+type HomeProps = {
+  testimonials: Testimonial[];
+};
 
 const ArrowRight = () => (
   <svg
@@ -237,7 +222,11 @@ const Linkedin = () => (
   </svg>
 );
 
-const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+const SectionLabel = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => (
   <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.22em] text-[#0758AA]">
     {children}
   </span>
@@ -271,7 +260,7 @@ const CTAButton = ({
   );
 };
 
-export default function Home() {
+export default function Home({ testimonials }: HomeProps) {
   const [heroIndex, setHeroIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
 
@@ -284,11 +273,14 @@ export default function Home() {
   );
 
   const currentHero = heroSlides[heroIndex];
-  const currentTestimonial = testimonials[testimonialIndex];
 
-  
-   // HERO AUTO SLIDER
-  
+  const currentTestimonial =
+    testimonials.length > 0 ? testimonials[testimonialIndex] : null;
+
+  /*
+   * HERO AUTO SLIDER
+   */
+
   useEffect(() => {
     const timer = window.setInterval(() => {
       setHeroIndex((current) => (current + 1) % heroSlides.length);
@@ -297,12 +289,19 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, [heroIndex]);
 
-  
-  // TESTIMONIAL AUTO ROTATION
-   
+  /*
+   * TESTIMONIAL AUTO ROTATION
+   */
+
   useEffect(() => {
+    if (testimonials.length === 0) {
+      return;
+    }
+
     testimonialTimerRef.current = window.setInterval(() => {
-      setTestimonialIndex((current) => (current + 1) % testimonials.length);
+      setTestimonialIndex(
+        (current) => (current + 1) % testimonials.length
+      );
     }, 6000);
 
     return () => {
@@ -310,10 +309,29 @@ export default function Home() {
         window.clearInterval(testimonialTimerRef.current);
       }
     };
-  }, []);
+  }, [testimonials.length]);
 
-  // SCROLL REVEAL
-   
+  /*
+   * SAFETY:
+   * If testimonials are removed from Sanity while the page is open,
+   * make sure testimonialIndex does not point to a missing item.
+   */
+
+  useEffect(() => {
+    if (testimonials.length === 0) {
+      setTestimonialIndex(0);
+      return;
+    }
+
+    if (testimonialIndex >= testimonials.length) {
+      setTestimonialIndex(0);
+    }
+  }, [testimonials.length, testimonialIndex]);
+
+  /*
+   * SCROLL REVEAL
+   */
+
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>(
       "[data-scroll-reveal]"
@@ -366,19 +384,26 @@ export default function Home() {
   };
 
   const nextTestimonial = () => {
+    if (testimonials.length === 0) return;
+
     setTestimonialIndex(
       (current) => (current + 1) % testimonials.length
     );
   };
 
   const previousTestimonial = () => {
+    if (testimonials.length === 0) return;
+
     setTestimonialIndex(
       (current) =>
         (current - 1 + testimonials.length) % testimonials.length
     );
   };
 
-  const revealClass = (id: string, direction: "left" | "right" | "up") => {
+  const revealClass = (
+    id: string,
+    direction: "left" | "right" | "up"
+  ) => {
     const base =
       "transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]";
 
@@ -396,140 +421,143 @@ export default function Home() {
   };
 
   return (
-  <main className="w-full overflow-hidden bg-white pt-[104px] text-[#26384A]">
-    
-    {/* HERO */}
-    <section className="relative min-h-[460px] overflow-hidden md:h-[572px]">
+    <main className="w-full overflow-hidden bg-white pt-[104px] text-[#26384A]">
+      {/* =========================================================
+          HERO
+          ========================================================= */}
 
-      {heroSlides.map((slide, index) => (
-        <div
-          key={slide.title}
-          className={`absolute inset-0 transition-opacity duration-[1000ms] ease-in-out ${
-            index === heroIndex
-              ? "z-[1] opacity-100"
-              : "z-0 opacity-0"
-          }`}
-        >
-          <img
-            src={
-              index === 0
-                ? "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2200&q=90"
-                : index === 1
-                ? "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2200&q=90"
-                : index === 2
-                ? "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=2200&q=90"
-                : "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=2200&q=90"
-            }
-            alt={slide.title}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
+      <section className="relative min-h-[460px] overflow-hidden md:h-[572px]">
+        {heroSlides.map((slide, index) => (
+          <div
+            key={slide.title}
+            className={`absolute inset-0 transition-opacity duration-[1000ms] ease-in-out ${
+              index === heroIndex
+                ? "z-[1] opacity-100"
+                : "z-0 opacity-0"
+            }`}
+          >
+            <img
+              src={
+                index === 0
+                  ? "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2200&q=90"
+                  : index === 1
+                  ? "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2200&q=90"
+                  : index === 2
+                  ? "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=2200&q=90"
+                  : "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=2200&q=90"
+              }
+              alt={slide.title}
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
 
-          <div className="absolute inset-0 bg-[#082b4d]/55" />
+            <div className="absolute inset-0 bg-[#082b4d]/55" />
 
-          <div className="absolute inset-0 bg-gradient-to-r from-[#062f54]/80 via-[#073c68]/35 to-transparent" />
-        </div>
-      ))}
-
-      {/* Previous */}
-      <button
-        type="button"
-        aria-label="Previous hero slide"
-        onClick={previousHero}
-        className="absolute left-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] md:left-6"
-      >
-        <ArrowLeft />
-      </button>
-
-      {/* Next */}
-      <button
-        type="button"
-        aria-label="Next hero slide"
-        onClick={nextHero}
-        className="absolute right-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] md:right-6"
-      >
-        <ArrowRight />
-      </button>
-
-      {/* Hero Content */}
-      <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 py-16 md:px-10 lg:px-12">
-        <div
-          key={heroIndex}
-          className="max-w-[700px] animate-[heroContentIn_700ms_ease-out]"
-        >
-          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80">
-            Youth Evolution Foundation
-          </p>
-
-          <h1 className="max-w-[680px] text-[34px] font-extrabold leading-[1.06] tracking-[-0.035em] text-white sm:text-[43px] md:text-[52px]">
-            {currentHero.title}
-          </h1>
-
-          <p className="mt-5 max-w-[590px] text-[14px] leading-6 text-white/88 md:text-[15px]">
-            {currentHero.description}
-          </p>
-
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <CTAButton href="#programs">
-              {currentHero.primary}
-            </CTAButton>
-
-            <CTAButton href="#support" variant="light">
-              {(heroIndex === 0 || heroIndex === 2) && <Heart />}
-              {currentHero.secondary}
-            </CTAButton>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#062f54]/80 via-[#073c68]/35 to-transparent" />
           </div>
+        ))}
 
-          <div className="mt-8 flex items-center gap-2">
-            {heroSlides.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                aria-label={`Go to slide ${index + 1}`}
-                onClick={() => setHeroIndex(index)}
-                className={`h-[3px] rounded-full transition-all duration-500 ${
-                  index === heroIndex
-                    ? "w-8 bg-white"
-                    : "w-4 bg-white/40 hover:bg-white/70"
-                }`}
-              />
+        {/* Previous */}
+
+        <button
+          type="button"
+          aria-label="Previous hero slide"
+          onClick={previousHero}
+          className="absolute left-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] md:left-6"
+        >
+          <ArrowLeft />
+        </button>
+
+        {/* Next */}
+
+        <button
+          type="button"
+          aria-label="Next hero slide"
+          onClick={nextHero}
+          className="absolute right-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] md:right-6"
+        >
+          <ArrowRight />
+        </button>
+
+        {/* Hero Content */}
+
+        <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 py-16 md:px-10 lg:px-12">
+          <div
+            key={heroIndex}
+            className="max-w-[700px] animate-[heroContentIn_700ms_ease-out]"
+          >
+            <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80">
+              Youth Evolution Foundation
+            </p>
+
+            <h1 className="max-w-[680px] text-[34px] font-extrabold leading-[1.06] tracking-[-0.035em] text-white sm:text-[43px] md:text-[52px]">
+              {currentHero.title}
+            </h1>
+
+            <p className="mt-5 max-w-[590px] text-[14px] leading-6 text-white/88 md:text-[15px]">
+              {currentHero.description}
+            </p>
+
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <CTAButton href="#programs">
+                {currentHero.primary}
+              </CTAButton>
+
+              <CTAButton href="#support" variant="light">
+                {(heroIndex === 0 || heroIndex === 2) && <Heart />}
+                {currentHero.secondary}
+              </CTAButton>
+            </div>
+
+            <div className="mt-8 flex items-center gap-2">
+              {heroSlides.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  aria-label={`Go to slide ${index + 1}`}
+                  onClick={() => setHeroIndex(index)}
+                  className={`h-[3px] rounded-full transition-all duration-500 ${
+                    index === heroIndex
+                      ? "w-8 bg-white"
+                      : "w-4 bg-white/40 hover:bg-white/70"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          PARTNER STRIP
+          ========================================================= */}
+
+      <section className="overflow-hidden border-b border-[#edf1f5] bg-white">
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-7 md:px-10 lg:px-12">
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent" />
+
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent" />
+
+          <div
+            className="flex w-max items-center gap-14 md:gap-20"
+            style={{
+              animation: "partnerMove 30s linear infinite",
+            }}
+          >
+            {[...partnerLogos, ...partnerLogos].map((partner, index) => (
+              <div
+                key={`${partner.name}-${index}`}
+                className="flex h-8 w-[110px] shrink-0 items-center justify-center"
+              >
+                <img
+                  src={partner.image}
+                  alt={partner.name}
+                  className="max-h-8 max-w-[105px] object-contain"
+                />
+              </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
-
-      {/* =========================================================
-    PARTNER STRIP
-    ========================================================= */}
-
-<section className="overflow-hidden border-b border-[#edf1f5] bg-white">
-  <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-7 md:px-10 lg:px-12">
-
-    <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent" />
-
-    <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent" />
-
-    <div
-      className="flex w-max items-center gap-14 md:gap-20"
-      style={{
-        animation: "partnerMove 30s linear infinite",
-      }}
-    >
-      {[...partnerLogos, ...partnerLogos].map((partner, index) => (
-        <div
-          key={`${partner.name}-${index}`}
-          className="flex h-8 w-[110px] shrink-0 items-center justify-center"
-        >
-          <img
-            src={partner.image}
-            alt={partner.name}
-            className="max-h-8 max-w-[105px] object-contain"
-          />
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* =========================================================
           WHO WE ARE
@@ -543,7 +571,6 @@ export default function Home() {
         )}`}
       >
         <div className="mx-auto max-w-[1200px]">
-
           <div className="mb-12 text-center md:mb-14">
             <SectionLabel>Who We Are</SectionLabel>
 
@@ -555,8 +582,8 @@ export default function Home() {
           </div>
 
           <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
-
             {/* LEFT */}
+
             <div
               data-scroll-reveal="who-text"
               className={revealClass("who-text", "left")}
@@ -596,6 +623,7 @@ export default function Home() {
             </div>
 
             {/* RIGHT */}
+
             <div
               data-scroll-reveal="who-image"
               className={`relative mx-auto w-full max-w-[520px] ${revealClass(
@@ -618,11 +646,9 @@ export default function Home() {
                 </p>
               </div>
             </div>
-
           </div>
         </div>
       </section>
-
 
       {/* =========================================================
           WHAT WE DO
@@ -637,7 +663,6 @@ export default function Home() {
         )}`}
       >
         <div className="mx-auto max-w-[1200px]">
-
           <div className="mb-12 text-center md:mb-14">
             <SectionLabel>What We Do</SectionLabel>
 
@@ -647,8 +672,8 @@ export default function Home() {
           </div>
 
           <div className="grid gap-7 lg:grid-cols-[1fr_1fr] lg:gap-9">
-
             {/* FEATURED PROGRAM */}
+
             <div
               data-scroll-reveal="program-featured"
               className={`relative min-h-[420px] overflow-hidden rounded-[14px] shadow-[0_8px_30px_rgba(16,48,80,0.08)] ${revealClass(
@@ -683,6 +708,7 @@ export default function Home() {
             </div>
 
             {/* PROGRAM LIST */}
+
             <div
               data-scroll-reveal="program-list"
               className={`flex flex-col gap-4 ${revealClass(
@@ -719,11 +745,9 @@ export default function Home() {
                 </article>
               ))}
             </div>
-
           </div>
         </div>
       </section>
-
 
       {/* =========================================================
           EVENTS
@@ -738,7 +762,6 @@ export default function Home() {
         )}`}
       >
         <div className="mx-auto max-w-[1200px]">
-
           <div className="mb-12 text-center md:mb-14">
             <SectionLabel>Join The Movement</SectionLabel>
 
@@ -748,8 +771,8 @@ export default function Home() {
           </div>
 
           <div className="grid gap-10 lg:grid-cols-[1.6fr_0.9fr]">
-
             {/* FEATURED EVENT */}
+
             <article
               data-scroll-reveal="event-featured"
               className={`grid gap-6 md:grid-cols-[1.05fr_0.95fr] md:items-center ${revealClass(
@@ -806,6 +829,7 @@ export default function Home() {
             </article>
 
             {/* UPCOMING */}
+
             <div
               data-scroll-reveal="event-list"
               className={`border-l border-[#d8e5f1] pl-6 md:pl-7 ${revealClass(
@@ -846,11 +870,9 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
-
 
       {/* =========================================================
           STORIES OF CHANGE
@@ -864,7 +886,6 @@ export default function Home() {
         )}`}
       >
         <div className="mx-auto max-w-[1200px]">
-
           <div className="mb-10 text-center">
             <SectionLabel>Stories of Change</SectionLabel>
 
@@ -875,86 +896,110 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* Smooth testimonial transition */}
-          <div
-            key={testimonialIndex}
-            className="flex flex-col items-center gap-7 md:flex-row md:gap-9 animate-[testimonialIn_700ms_cubic-bezier(0.22,1,0.36,1)]"
-          >
-            <div className="h-[105px] w-[105px] shrink-0 overflow-hidden rounded-[12px] shadow-sm">
-              <img
-                src={currentTestimonial.image}
-                alt={currentTestimonial.name}
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
+          {/* =====================================================
+              SANITY TESTIMONIAL
+              ===================================================== */}
 
-            <div className="flex-1 text-center md:text-left">
-              <div className="mb-3 text-[30px] leading-none text-[#0758AA]">
-                “
-              </div>
+          {currentTestimonial ? (
+            <div
+              key={currentTestimonial._id}
+              className="flex flex-col items-center gap-7 md:flex-row md:gap-9 animate-[testimonialIn_700ms_cubic-bezier(0.22,1,0.36,1)]"
+            >
+              {/* TESTIMONIAL IMAGE */}
 
-              <blockquote className="max-w-[720px] text-[18px] font-medium leading-[1.55] tracking-[-0.01em] text-[#26384A] md:text-[20px]">
-                {currentTestimonial.quote}
-              </blockquote>
-
-              <div className="mt-4">
-                <p className="text-[14px] font-bold text-[#0758AA]">
-                  {currentTestimonial.name}
-                </p>
-
-                <p className="mt-0.5 text-[11px] text-[#667085]">
-                  {currentTestimonial.role}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex shrink-0 flex-col items-center gap-3 md:items-end">
-
-              <span className="text-[11px] font-bold tracking-[0.12em] text-[#0758AA]">
-                {String(testimonialIndex + 1).padStart(2, "0")} / 04
-              </span>
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  aria-label="Previous testimonial"
-                  onClick={previousTestimonial}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[#b9d2e8] bg-white text-[#0758AA] transition-all duration-300 hover:-translate-x-0.5 hover:bg-[#0758AA] hover:text-white"
-                >
-                  <ArrowLeft />
-                </button>
-
-                <button
-                  type="button"
-                  aria-label="Next testimonial"
-                  onClick={nextTestimonial}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[#0758AA] bg-[#0758AA] text-white transition-all duration-300 hover:translate-x-0.5 hover:bg-[#064c92]"
-                >
-                  <ArrowRight />
-                </button>
-              </div>
-
-              <div className="flex gap-1.5">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    aria-label={`View testimonial ${index + 1}`}
-                    onClick={() => setTestimonialIndex(index)}
-                    className={`h-1.5 rounded-full transition-all duration-500 ${
-                      index === testimonialIndex
-                        ? "w-5 bg-[#0758AA]"
-                        : "w-1.5 bg-[#b9d2e8]"
-                    }`}
+              <div className="h-[105px] w-[105px] shrink-0 overflow-hidden rounded-[12px] shadow-sm">
+                {currentTestimonial.image ? (
+                  <img
+                    src={urlFor(currentTestimonial.image)
+                      .width(500)
+                      .height(500)
+                      .url()}
+                    alt={currentTestimonial.name}
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                   />
-                ))}
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-[#EFF7FF] text-[24px] font-bold text-[#0758AA]">
+                    {currentTestimonial.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
 
+              {/* TESTIMONIAL CONTENT */}
+
+              <div className="flex-1 text-center md:text-left">
+                <div className="mb-3 text-[30px] leading-none text-[#0758AA]">
+                  “
+                </div>
+
+                <blockquote className="max-w-[720px] text-[18px] font-medium leading-[1.55] tracking-[-0.01em] text-[#26384A] md:text-[20px]">
+                  {currentTestimonial.quote}
+                </blockquote>
+
+                <div className="mt-4">
+                  <p className="text-[14px] font-bold text-[#0758AA]">
+                    {currentTestimonial.name}
+                  </p>
+
+                  <p className="mt-0.5 text-[11px] text-[#667085]">
+                    {currentTestimonial.role}
+                  </p>
+                </div>
+              </div>
+
+              {/* TESTIMONIAL CONTROLS */}
+
+              <div className="flex shrink-0 flex-col items-center gap-3 md:items-end">
+                <span className="text-[11px] font-bold tracking-[0.12em] text-[#0758AA]">
+                  {String(testimonialIndex + 1).padStart(2, "0")} /{" "}
+                  {String(testimonials.length).padStart(2, "0")}
+                </span>
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    aria-label="Previous testimonial"
+                    onClick={previousTestimonial}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#b9d2e8] bg-white text-[#0758AA] transition-all duration-300 hover:-translate-x-0.5 hover:bg-[#0758AA] hover:text-white"
+                  >
+                    <ArrowLeft />
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-label="Next testimonial"
+                    onClick={nextTestimonial}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#0758AA] bg-[#0758AA] text-white transition-all duration-300 hover:translate-x-0.5 hover:bg-[#064c92]"
+                  >
+                    <ArrowRight />
+                  </button>
+                </div>
+
+                {/* DOTS */}
+
+                <div className="flex gap-1.5">
+                  {testimonials.map((testimonial, index) => (
+                    <button
+                      key={testimonial._id}
+                      type="button"
+                      aria-label={`View testimonial ${index + 1}`}
+                      onClick={() => setTestimonialIndex(index)}
+                      className={`h-1.5 rounded-full transition-all duration-500 ${
+                        index === testimonialIndex
+                          ? "w-5 bg-[#0758AA]"
+                          : "w-1.5 bg-[#b9d2e8]"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="py-8 text-center text-[13px] text-[#667085]">
+              No stories available yet.
+            </div>
+          )}
         </div>
       </section>
-
 
       {/* =========================================================
           SUPPORT CTA
@@ -969,9 +1014,7 @@ export default function Home() {
         )}`}
       >
         <div className="mx-auto max-w-[1160px] overflow-hidden rounded-[13px] bg-[#0758AA] px-7 py-10 shadow-[0_12px_35px_rgba(7,88,170,0.16)] transition-transform duration-500 hover:shadow-[0_18px_45px_rgba(7,88,170,0.20)] md:px-11 md:py-12 lg:px-14">
-
           <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-14">
-
             <div>
               <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/65">
                 Make A Difference
@@ -1007,14 +1050,9 @@ export default function Home() {
                 </CTAButton>
               </div>
             </div>
-
           </div>
         </div>
       </section>
-
-
-     
-     
     </main>
   );
 }
