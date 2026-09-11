@@ -122,7 +122,7 @@ const events = [
 ];
 
 /* =========================================================
-   SANITY TESTIMONIAL TYPE
+   SANITY TYPES
    ========================================================= */
 
 type Testimonial = {
@@ -133,8 +133,19 @@ type Testimonial = {
   image?: SanityImageSource;
 };
 
+type HeroBanner = {
+  _id: string;
+  title: string;
+  description: string;
+  image?: SanityImageSource;
+  primaryButton?: string;
+  secondaryButton?: string;
+  order?: number;
+};
+
 type HomeProps = {
   testimonials: Testimonial[];
+  heroBanners?: HeroBanner[];
 };
 
 const ArrowRight = () => (
@@ -260,7 +271,10 @@ const CTAButton = ({
   );
 };
 
-export default function Home({ testimonials }: HomeProps) {
+export default function Home({
+  testimonials,
+  heroBanners = [],
+}: HomeProps) {
   const [heroIndex, setHeroIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
 
@@ -268,11 +282,38 @@ export default function Home({ testimonials }: HomeProps) {
     Record<string, boolean>
   >({});
 
-  const testimonialTimerRef = useRef<ReturnType<typeof setInterval> | null>(
-    null
-  );
+  const testimonialTimerRef = useRef<number | null>(null);
 
-  const currentHero = heroSlides[heroIndex];
+  /*
+   * HERO DATA
+   *
+   * If Hero Banners exist in Sanity, use them.
+   * Otherwise, use the original hard-coded hero content.
+   */
+
+  const slides =
+    heroBanners.length > 0
+      ? heroBanners.map((banner) => ({
+          id: banner._id,
+          title: banner.title,
+          description: banner.description,
+          primary: banner.primaryButton || "Learn More",
+          secondary: banner.secondaryButton || "Donate",
+          image: banner.image,
+        }))
+      : heroSlides.map((slide, index) => ({
+          id: `fallback-${index}`,
+          title: slide.title,
+          description: slide.description,
+          primary: slide.primary,
+          secondary: slide.secondary,
+          image: undefined,
+        }));
+
+  const safeHeroIndex =
+    slides.length > 0 ? heroIndex % slides.length : 0;
+
+  const currentHero = slides[safeHeroIndex];
 
   const currentTestimonial =
     testimonials.length > 0 ? testimonials[testimonialIndex] : null;
@@ -282,12 +323,31 @@ export default function Home({ testimonials }: HomeProps) {
    */
 
   useEffect(() => {
+    if (slides.length <= 1) {
+      return;
+    }
+
     const timer = window.setInterval(() => {
-      setHeroIndex((current) => (current + 1) % heroSlides.length);
+      setHeroIndex((current) => (current + 1) % slides.length);
     }, 6500);
 
     return () => window.clearInterval(timer);
-  }, [heroIndex]);
+  }, [slides.length]);
+
+  /*
+   * HERO INDEX SAFETY
+   */
+
+  useEffect(() => {
+    if (slides.length === 0) {
+      setHeroIndex(0);
+      return;
+    }
+
+    if (heroIndex >= slides.length) {
+      setHeroIndex(0);
+    }
+  }, [slides.length, heroIndex]);
 
   /*
    * TESTIMONIAL AUTO ROTATION
@@ -374,12 +434,16 @@ export default function Home({ testimonials }: HomeProps) {
   }, []);
 
   const nextHero = () => {
-    setHeroIndex((current) => (current + 1) % heroSlides.length);
+    if (slides.length === 0) return;
+
+    setHeroIndex((current) => (current + 1) % slides.length);
   };
 
   const previousHero = () => {
+    if (slides.length === 0) return;
+
     setHeroIndex(
-      (current) => (current - 1 + heroSlides.length) % heroSlides.length
+      (current) => (current - 1 + slides.length) % slides.length
     );
   };
 
@@ -427,24 +491,24 @@ export default function Home({ testimonials }: HomeProps) {
           ========================================================= */}
 
       <section className="relative min-h-[460px] overflow-hidden md:h-[572px]">
-        {heroSlides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <div
-            key={slide.title}
+            key={slide.id}
             className={`absolute inset-0 transition-opacity duration-[1000ms] ease-in-out ${
-              index === heroIndex
+              index === safeHeroIndex
                 ? "z-[1] opacity-100"
                 : "z-0 opacity-0"
             }`}
           >
             <img
               src={
-                index === 0
-                  ? "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2200&q=90"
-                  : index === 1
-                  ? "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2200&q=90"
-                  : index === 2
-                  ? "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=2200&q=90"
-                  : "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=2200&q=90"
+                slide.image
+                  ? urlFor(slide.image)
+                      .width(2200)
+                      .height(1200)
+                      .fit("crop")
+                      .url()
+                  : heroImages[index % heroImages.length]
               }
               alt={slide.title}
               className="absolute inset-0 h-full w-full object-cover object-center"
@@ -480,51 +544,55 @@ export default function Home({ testimonials }: HomeProps) {
 
         {/* Hero Content */}
 
-        <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 py-16 md:px-10 lg:px-12">
-          <div
-            key={heroIndex}
-            className="max-w-[700px] animate-[heroContentIn_700ms_ease-out]"
-          >
-            <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80">
-              Youth Evolution Foundation
-            </p>
+        {currentHero && (
+          <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 py-16 md:px-10 lg:px-12">
+            <div
+              key={safeHeroIndex}
+              className="max-w-[700px] animate-[heroContentIn_700ms_ease-out]"
+            >
+              <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80">
+                Youth Evolution Foundation
+              </p>
 
-            <h1 className="max-w-[680px] text-[34px] font-extrabold leading-[1.06] tracking-[-0.035em] text-white sm:text-[43px] md:text-[52px]">
-              {currentHero.title}
-            </h1>
+              <h1 className="max-w-[680px] text-[34px] font-extrabold leading-[1.06] tracking-[-0.035em] text-white sm:text-[43px] md:text-[52px]">
+                {currentHero.title}
+              </h1>
 
-            <p className="mt-5 max-w-[590px] text-[14px] leading-6 text-white/88 md:text-[15px]">
-              {currentHero.description}
-            </p>
+              <p className="mt-5 max-w-[590px] text-[14px] leading-6 text-white/88 md:text-[15px]">
+                {currentHero.description}
+              </p>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <CTAButton href="#programs">
-                {currentHero.primary}
-              </CTAButton>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <CTAButton href="#programs">
+                  {currentHero.primary}
+                </CTAButton>
 
-              <CTAButton href="#support" variant="light">
-                {(heroIndex === 0 || heroIndex === 2) && <Heart />}
-                {currentHero.secondary}
-              </CTAButton>
-            </div>
+                <CTAButton href="#support" variant="light">
+                  {(safeHeroIndex === 0 || safeHeroIndex === 2) && (
+                    <Heart />
+                  )}
+                  {currentHero.secondary}
+                </CTAButton>
+              </div>
 
-            <div className="mt-8 flex items-center gap-2">
-              {heroSlides.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  aria-label={`Go to slide ${index + 1}`}
-                  onClick={() => setHeroIndex(index)}
-                  className={`h-[3px] rounded-full transition-all duration-500 ${
-                    index === heroIndex
-                      ? "w-8 bg-white"
-                      : "w-4 bg-white/40 hover:bg-white/70"
-                  }`}
-                />
-              ))}
+              <div className="mt-8 flex items-center gap-2">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    aria-label={`Go to slide ${index + 1}`}
+                    onClick={() => setHeroIndex(index)}
+                    className={`h-[3px] rounded-full transition-all duration-500 ${
+                      index === safeHeroIndex
+                        ? "w-8 bg-white"
+                        : "w-4 bg-white/40 hover:bg-white/70"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* =========================================================

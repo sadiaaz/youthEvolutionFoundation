@@ -5,10 +5,14 @@ export const aboutPageQuery = groq`{
     heroTitle,
     heroSubtitle,
     heroImage,
+    heroSlides[]{ image, alt },
     storyTitle,
     storyContent,
+    storyImage,
     mission,
+    missionImage,
     vision,
+    visionImage,
     ctaTitle,
     ctaButtonText,
     ctaButtonLink,
@@ -29,10 +33,11 @@ export const aboutPageQuery = groq`{
     image,
     linkedin
   },
-  "team": *[_type == "team"] | order(order asc){
+    "team": *[_type == "team"] | order(order asc){
     _id,
     name,
     role,
+    department,
     image,
     linkedin
   }
@@ -45,4 +50,16 @@ export const testimonialsQuery = groq`*[_type == "testimonial"]
     role,
     quote,
     image
+  }`
+
+
+
+export const heroBannerQuery = groq`*[_type == "heroBanner"]
+  | order(order asc){
+    _id,
+    title,
+    description,
+    image,
+    primaryButton,
+    secondaryButton
   }`

@@ -59,12 +59,23 @@ export default function Home() {
 
 
 
+
+
 import Home from "./home/home";
 import { client } from "@/sanity/lib/client";
-import { testimonialsQuery } from "@/sanity/lib/queries";
+import {
+  testimonialsQuery,
+  heroBannerQuery,
+} from "@/sanity/lib/queries";
 
 export default async function Page() {
   const testimonials = await client.fetch(testimonialsQuery);
+  const heroBanners = await client.fetch(heroBannerQuery);
 
-  return <Home testimonials={testimonials} />;
+  return (
+    <Home
+      testimonials={testimonials}
+      heroBanners={heroBanners}
+    />
+  );
 }

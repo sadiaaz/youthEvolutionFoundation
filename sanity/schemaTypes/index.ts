@@ -1,5 +1,5 @@
 import { type SchemaTypeDefinition } from 'sanity'
-
+import heroBanner from './heroBanner'
 import program from './program'
 import project from './project'
 import impactStory from './impactStory'
@@ -12,6 +12,7 @@ import testimonial from './testimonial'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
+    heroBanner,
     program,
     project,
     impactStory,

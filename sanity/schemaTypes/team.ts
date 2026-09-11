@@ -18,6 +18,11 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'department',
+      title: 'Department / Team',
+      type: 'string',
+    }),
+    defineField({
       name: 'image',
       title: 'Photo',
       type: 'image',
