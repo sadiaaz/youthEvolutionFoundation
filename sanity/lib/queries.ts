@@ -42,3 +42,24 @@ export const aboutPageQuery = groq`{
     linkedin
   }
 }`
+
+export const testimonialsQuery = groq`*[_type == "testimonial"]
+  | order(_createdAt asc){
+    _id,
+    name,
+    role,
+    quote,
+    image
+  }`
+
+
+
+export const heroBannerQuery = groq`*[_type == "heroBanner"]
+  | order(order asc){
+    _id,
+    title,
+    description,
+    image,
+    primaryButton,
+    secondaryButton
+  }`
