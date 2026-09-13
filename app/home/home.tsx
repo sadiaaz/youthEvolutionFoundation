@@ -1,47 +1,31 @@
 "use client";
 
 import "./home.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { urlFor } from "../../sanity/lib/image";
 import type { SanityImageSource } from "@sanity/image-url";
 
-const heroSlides = [
-  {
-    title: "Empowering Youth, Building Sustainable Communities",
-    description:
-      "Creating opportunities that empower young people through education, leadership, innovation, and community development.",
-    primary: "Explore Programs",
-    secondary: "Donate",
-  },
-  {
-    title: "Transforming Lives Through Education & Skills",
-    description:
-      "Helping young people build brighter futures through quality education, skills training, and meaningful mentorship.",
-    primary: "Our Programs",
-    secondary: "Join as a Volunteer",
-  },
-  {
-    title: "Together We Create Lasting Impact",
-    description:
-      "Every donation, volunteer, and partnership creates lasting impact and strengthens communities across Pakistan.",
-    primary: "Become a Partner",
-    secondary: "Donate Now",
-  },
-  {
-    title: "Your Next Opportunity Starts Here",
-    description:
-      "Join our upcoming events, volunteer initiatives, and youth programs and take the next step toward creating meaningful impact.",
-    primary: "View Upcoming Events",
-    secondary: "Register Now",
-  },
-];
+/* =========================================================
+   SANITY TYPES
+   ========================================================= */
 
-const heroImages = [
-  "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2200&q=90",
-  "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2200&q=90",
-  "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=2200&q=90",
-  "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=2200&q=90",
-];
+type HeroBanner = {
+  _id: string;
+  title: string;
+  description: string;
+  image?: SanityImageSource;
+  primaryButton?: string;
+  secondaryButton?: string;
+  order?: number;
+};
+
+type HomeProps = {
+  heroBanners?: HeroBanner[];
+};
+
+/* =========================================================
+   PARTNERS
+   ========================================================= */
 
 const partnerLogos = [
   {
@@ -70,6 +54,10 @@ const partnerLogos = [
   },
 ];
 
+/* =========================================================
+   PROGRAMS
+   ========================================================= */
+
 const programs = [
   {
     number: "02",
@@ -97,6 +85,10 @@ const programs = [
   },
 ];
 
+/* =========================================================
+   EVENTS
+   ========================================================= */
+
 const events = [
   {
     day: "06",
@@ -122,31 +114,8 @@ const events = [
 ];
 
 /* =========================================================
-   SANITY TYPES
+   ICONS
    ========================================================= */
-
-type Testimonial = {
-  _id: string;
-  name: string;
-  role: string;
-  quote: string;
-  image?: SanityImageSource;
-};
-
-type HeroBanner = {
-  _id: string;
-  title: string;
-  description: string;
-  image?: SanityImageSource;
-  primaryButton?: string;
-  secondaryButton?: string;
-  order?: number;
-};
-
-type HomeProps = {
-  testimonials: Testimonial[];
-  heroBanners?: HeroBanner[];
-};
 
 const ArrowRight = () => (
   <svg
@@ -233,6 +202,10 @@ const Linkedin = () => (
   </svg>
 );
 
+/* =========================================================
+   UI HELPERS
+   ========================================================= */
+
 const SectionLabel = ({
   children,
 }: {
@@ -271,52 +244,38 @@ const CTAButton = ({
   );
 };
 
+/* =========================================================
+   HOME
+   ========================================================= */
+
 export default function Home({
-  testimonials,
   heroBanners = [],
 }: HomeProps) {
   const [heroIndex, setHeroIndex] = useState(0);
-  const [testimonialIndex, setTestimonialIndex] = useState(0);
 
   const [visibleSections, setVisibleSections] = useState<
     Record<string, boolean>
   >({});
 
-  const testimonialTimerRef = useRef<number | null>(null);
-
   /*
    * HERO DATA
    *
-   * If Hero Banners exist in Sanity, use them.
-   * Otherwise, use the original hard-coded hero content.
+   * Hero content is now provided entirely by Sanity.
    */
 
-  const slides =
-    heroBanners.length > 0
-      ? heroBanners.map((banner) => ({
-          id: banner._id,
-          title: banner.title,
-          description: banner.description,
-          primary: banner.primaryButton || "Learn More",
-          secondary: banner.secondaryButton || "Donate",
-          image: banner.image,
-        }))
-      : heroSlides.map((slide, index) => ({
-          id: `fallback-${index}`,
-          title: slide.title,
-          description: slide.description,
-          primary: slide.primary,
-          secondary: slide.secondary,
-          image: undefined,
-        }));
+  const slides = heroBanners.map((banner) => ({
+    id: banner._id,
+    title: banner.title,
+    description: banner.description,
+    primary: banner.primaryButton || "Learn More",
+    secondary: banner.secondaryButton || "Donate",
+    image: banner.image,
+  }));
 
   const safeHeroIndex =
     slides.length > 0 ? heroIndex % slides.length : 0;
 
   const currentHero = slides[safeHeroIndex];
-
-  const currentTestimonial =
-    testimonials.length > 0 ? testimonials[testimonialIndex] : null;
 
   /*
    * HERO AUTO SLIDER
@@ -334,59 +293,7 @@ export default function Home({
     return () => window.clearInterval(timer);
   }, [slides.length]);
 
-  /*
-   * HERO INDEX SAFETY
-   */
-
-  useEffect(() => {
-    if (slides.length === 0) {
-      setHeroIndex(0);
-      return;
-    }
-
-    if (heroIndex >= slides.length) {
-      setHeroIndex(0);
-    }
-  }, [slides.length, heroIndex]);
-
-  /*
-   * TESTIMONIAL AUTO ROTATION
-   */
-
-  useEffect(() => {
-    if (testimonials.length === 0) {
-      return;
-    }
-
-    testimonialTimerRef.current = window.setInterval(() => {
-      setTestimonialIndex(
-        (current) => (current + 1) % testimonials.length
-      );
-    }, 6000);
-
-    return () => {
-      if (testimonialTimerRef.current) {
-        window.clearInterval(testimonialTimerRef.current);
-      }
-    };
-  }, [testimonials.length]);
-
-  /*
-   * SAFETY:
-   * If testimonials are removed from Sanity while the page is open,
-   * make sure testimonialIndex does not point to a missing item.
-   */
-
-  useEffect(() => {
-    if (testimonials.length === 0) {
-      setTestimonialIndex(0);
-      return;
-    }
-
-    if (testimonialIndex >= testimonials.length) {
-      setTestimonialIndex(0);
-    }
-  }, [testimonials.length, testimonialIndex]);
+ 
 
   /*
    * SCROLL REVEAL
@@ -447,23 +354,6 @@ export default function Home({
     );
   };
 
-  const nextTestimonial = () => {
-    if (testimonials.length === 0) return;
-
-    setTestimonialIndex(
-      (current) => (current + 1) % testimonials.length
-    );
-  };
-
-  const previousTestimonial = () => {
-    if (testimonials.length === 0) return;
-
-    setTestimonialIndex(
-      (current) =>
-        (current - 1 + testimonials.length) % testimonials.length
-    );
-  };
-
   const revealClass = (
     id: string,
     direction: "left" | "right" | "up"
@@ -500,19 +390,17 @@ export default function Home({
                 : "z-0 opacity-0"
             }`}
           >
-            <img
-              src={
-                slide.image
-                  ? urlFor(slide.image)
-                      .width(2200)
-                      .height(1200)
-                      .fit("crop")
-                      .url()
-                  : heroImages[index % heroImages.length]
-              }
-              alt={slide.title}
-              className="absolute inset-0 h-full w-full object-cover object-center"
-            />
+            {slide.image && (
+              <img
+                src={urlFor(slide.image)
+                  .width(2200)
+                  .height(1200)
+                  .fit("crop")
+                  .url()}
+                alt={slide.title}
+                className="absolute inset-0 h-full w-full object-cover object-center"
+              />
+            )}
 
             <div className="absolute inset-0 bg-[#082b4d]/55" />
 
@@ -526,7 +414,8 @@ export default function Home({
           type="button"
           aria-label="Previous hero slide"
           onClick={previousHero}
-          className="absolute left-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] md:left-6"
+          disabled={slides.length <= 1}
+          className="absolute left-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] disabled:cursor-default disabled:opacity-50 md:left-6"
         >
           <ArrowLeft />
         </button>
@@ -537,14 +426,15 @@ export default function Home({
           type="button"
           aria-label="Next hero slide"
           onClick={nextHero}
-          className="absolute right-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] md:right-6"
+          disabled={slides.length <= 1}
+          className="absolute right-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0758AA] disabled:cursor-default disabled:opacity-50 md:right-6"
         >
           <ArrowRight />
         </button>
 
         {/* Hero Content */}
 
-        {currentHero && (
+        {currentHero ? (
           <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 py-16 md:px-10 lg:px-12">
             <div
               key={safeHeroIndex}
@@ -590,6 +480,23 @@ export default function Home({
                   />
                 ))}
               </div>
+            </div>
+          </div>
+        ) : (
+          <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 py-16 md:px-10 lg:px-12">
+            <div className="max-w-[700px]">
+              <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80">
+                Youth Evolution Foundation
+              </p>
+
+              <h1 className="max-w-[680px] text-[34px] font-extrabold leading-[1.06] tracking-[-0.035em] text-white sm:text-[43px] md:text-[52px]">
+                Empowering Youth, Building Sustainable Communities
+              </h1>
+
+              <p className="mt-5 max-w-[590px] text-[14px] leading-6 text-white/88 md:text-[15px]">
+                Creating opportunities that empower young people through
+                education, leadership, innovation, and community development.
+              </p>
             </div>
           </div>
         )}
@@ -682,7 +589,7 @@ export default function Home({
               </div>
 
               <a
-                href="#about"
+                href="/about-us"
                 className="mt-7 inline-flex h-[42px] items-center gap-2 rounded-[7px] bg-[#0758AA] px-5 text-[13px] font-semibold text-white shadow-[0_5px_18px_rgba(7,88,170,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#064c92]"
               >
                 Learn More About YEF
@@ -943,133 +850,6 @@ export default function Home({
       </section>
 
       {/* =========================================================
-          STORIES OF CHANGE
-          ========================================================= */}
-
-      <section
-        data-scroll-reveal="stories"
-        className={`bg-[#EFF7FF] px-6 py-20 md:px-10 md:py-[88px] lg:px-12 ${revealClass(
-          "stories",
-          "up"
-        )}`}
-      >
-        <div className="mx-auto max-w-[1200px]">
-          <div className="mb-10 text-center">
-            <SectionLabel>Stories of Change</SectionLabel>
-
-            <h2 className="text-[30px] font-bold leading-[1.15] tracking-[-0.025em] text-[#0758AA] md:text-[34px]">
-              Real People. Real Growth.
-              <br className="hidden sm:block" />
-              Real Change.
-            </h2>
-          </div>
-
-          {/* =====================================================
-              SANITY TESTIMONIAL
-              ===================================================== */}
-
-          {currentTestimonial ? (
-            <div
-              key={currentTestimonial._id}
-              className="flex flex-col items-center gap-7 md:flex-row md:gap-9 animate-[testimonialIn_700ms_cubic-bezier(0.22,1,0.36,1)]"
-            >
-              {/* TESTIMONIAL IMAGE */}
-
-              <div className="h-[105px] w-[105px] shrink-0 overflow-hidden rounded-[12px] shadow-sm">
-                {currentTestimonial.image ? (
-                  <img
-                    src={urlFor(currentTestimonial.image)
-                      .width(500)
-                      .height(500)
-                      .url()}
-                    alt={currentTestimonial.name}
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[#EFF7FF] text-[24px] font-bold text-[#0758AA]">
-                    {currentTestimonial.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
-              </div>
-
-              {/* TESTIMONIAL CONTENT */}
-
-              <div className="flex-1 text-center md:text-left">
-                <div className="mb-3 text-[30px] leading-none text-[#0758AA]">
-                  “
-                </div>
-
-                <blockquote className="max-w-[720px] text-[18px] font-medium leading-[1.55] tracking-[-0.01em] text-[#26384A] md:text-[20px]">
-                  {currentTestimonial.quote}
-                </blockquote>
-
-                <div className="mt-4">
-                  <p className="text-[14px] font-bold text-[#0758AA]">
-                    {currentTestimonial.name}
-                  </p>
-
-                  <p className="mt-0.5 text-[11px] text-[#667085]">
-                    {currentTestimonial.role}
-                  </p>
-                </div>
-              </div>
-
-              {/* TESTIMONIAL CONTROLS */}
-
-              <div className="flex shrink-0 flex-col items-center gap-3 md:items-end">
-                <span className="text-[11px] font-bold tracking-[0.12em] text-[#0758AA]">
-                  {String(testimonialIndex + 1).padStart(2, "0")} /{" "}
-                  {String(testimonials.length).padStart(2, "0")}
-                </span>
-
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    aria-label="Previous testimonial"
-                    onClick={previousTestimonial}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#b9d2e8] bg-white text-[#0758AA] transition-all duration-300 hover:-translate-x-0.5 hover:bg-[#0758AA] hover:text-white"
-                  >
-                    <ArrowLeft />
-                  </button>
-
-                  <button
-                    type="button"
-                    aria-label="Next testimonial"
-                    onClick={nextTestimonial}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#0758AA] bg-[#0758AA] text-white transition-all duration-300 hover:translate-x-0.5 hover:bg-[#064c92]"
-                  >
-                    <ArrowRight />
-                  </button>
-                </div>
-
-                {/* DOTS */}
-
-                <div className="flex gap-1.5">
-                  {testimonials.map((testimonial, index) => (
-                    <button
-                      key={testimonial._id}
-                      type="button"
-                      aria-label={`View testimonial ${index + 1}`}
-                      onClick={() => setTestimonialIndex(index)}
-                      className={`h-1.5 rounded-full transition-all duration-500 ${
-                        index === testimonialIndex
-                          ? "w-5 bg-[#0758AA]"
-                          : "w-1.5 bg-[#b9d2e8]"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="py-8 text-center text-[13px] text-[#667085]">
-              No stories available yet.
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* =========================================================
           SUPPORT CTA
           ========================================================= */}
 
@@ -1097,7 +877,7 @@ export default function Home({
 
             <div className="max-w-[520px]">
               <p className="mb-5 text-[13px] leading-6 text-white/80">
-                Give your time. Share your skills. Support a young person's
+                Give your time. Share your skills. Support a young person&apos;s
                 journey.
               </p>
 
