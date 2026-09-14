@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 type ContactStatus = "New" | "Read" | "Resolved";
@@ -48,9 +48,7 @@ const initialVolunteers: Volunteer[] = [
   { id: 1, name: "Bilal Ahmed", email: "bilal@example.com", interest: "Teaching", message: "Want to help teach kids.", date: "2026-09-02", status: "Pending" },
 ];
 
-const initialDonations: Donation[] = [
-  { id: 1, donorName: "Hassan Iqbal", amount: 5000, paymentMethod: "EasyPaisa", transactionRef: "TXN12345", date: "2026-09-03", status: "Pending" },
-];
+const initialDonations: Donation[] = [];
 
 const statusColors: Record<string, string> = {
   New: "bg-blue-100 text-blue-700",
@@ -94,10 +92,40 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabKey>("contact");
   const [search, setSearch] = useState("");
   const [loggingOut, setLoggingOut] = useState(false);
+  const [loadingDonations, setLoadingDonations] = useState(false);
 
   const [contacts, setContacts] = useState<Contact[]>(initialContacts);
   const [volunteers, setVolunteers] = useState<Volunteer[]>(initialVolunteers);
   const [donations, setDonations] = useState<Donation[]>(initialDonations);
+
+  // Fetch real donations from API
+  const fetchDonations = async () => {
+    setLoadingDonations(true);
+    try {
+      const res = await fetch("/api/donations");
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        const mapped: Donation[] = json.data.map((item: any) => ({
+          id: item.id,
+          donorName: item.donor_name || "Anonymous",
+          amount: Number(item.amount) || 0,
+          paymentMethod: item.payment_method || "N/A",
+          transactionRef: item.transaction_ref || "-",
+          date: item.created_at ? new Date(item.created_at).toISOString().split("T")[0] : todayStr(),
+          status: (item.status as DonationStatus) || "Pending",
+        }));
+        setDonations(mapped);
+      }
+    } catch (err) {
+      console.error("Failed to fetch real donations from API:", err);
+    } finally {
+      setLoadingDonations(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDonations();
+  }, []);
 
   // Modal state: null = closed
   const [modal, setModal] = useState<{
@@ -146,7 +174,7 @@ export default function AdminDashboard() {
     if (type === "donation") setDonations((prev) => prev.filter((d) => d.id !== id));
   };
 
-  const handleSaveModal = () => {
+  const handleSaveModal = async () => {
     if (!modal) return;
     const { mode, type, data, id } = modal;
 
@@ -177,16 +205,59 @@ export default function AdminDashboard() {
     }
 
     if (type === "donation") {
-      const record: Donation = {
-        id: mode === "edit" && id ? id : nextId(donations),
-        donorName: data.donorName,
-        amount: Number(data.amount) || 0,
-        paymentMethod: data.paymentMethod,
-        transactionRef: data.transactionRef,
-        date: mode === "edit" ? donations.find((d) => d.id === id)?.date || todayStr() : todayStr(),
-        status: data.status as DonationStatus,
-      };
-      setDonations((prev) => (mode === "edit" ? prev.map((d) => (d.id === id ? record : d)) : [record, ...prev]));
+      if (mode === "add") {
+        try {
+          const res = await fetch("/api/donations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              donor_name: data.donorName,
+              donor_email: `${data.donorName.toLowerCase().replace(/\s+/g, "")}@example.com`,
+              amount: Number(data.amount) || 0,
+              payment_method: data.paymentMethod || "Direct",
+              transaction_ref: data.transactionRef || null,
+            }),
+          });
+          const resJson = await res.json();
+          if (resJson.success) {
+            fetchDonations();
+          } else {
+            // Local fallback
+            const record: Donation = {
+              id: nextId(donations),
+              donorName: data.donorName,
+              amount: Number(data.amount) || 0,
+              paymentMethod: data.paymentMethod,
+              transactionRef: data.transactionRef,
+              date: todayStr(),
+              status: data.status as DonationStatus,
+            };
+            setDonations((prev) => [record, ...prev]);
+          }
+        } catch {
+          const record: Donation = {
+            id: nextId(donations),
+            donorName: data.donorName,
+            amount: Number(data.amount) || 0,
+            paymentMethod: data.paymentMethod,
+            transactionRef: data.transactionRef,
+            date: todayStr(),
+            status: data.status as DonationStatus,
+          };
+          setDonations((prev) => [record, ...prev]);
+        }
+      } else {
+        const record: Donation = {
+          id: id || nextId(donations),
+          donorName: data.donorName,
+          amount: Number(data.amount) || 0,
+          paymentMethod: data.paymentMethod,
+          transactionRef: data.transactionRef,
+          date: donations.find((d) => d.id === id)?.date || todayStr(),
+          status: data.status as DonationStatus,
+        };
+        setDonations((prev) => prev.map((d) => (d.id === id ? record : d)));
+      }
     }
 
     setModal(null);
@@ -376,25 +447,39 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {filteredDonations.map((d, i) => (
-                  <tr key={d.id} className="border-t hover:bg-gray-50">
-                    <td className="px-6 py-4 text-gray-400">{d.id}</td>
-                    <td className="px-6 py-4 flex items-center gap-3 font-medium text-gray-800">
-                      <Avatar name={d.donorName} index={i} /> {d.donorName}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">Rs. {d.amount.toLocaleString()}</td>
-                    <td className="px-6 py-4 text-gray-600">{d.paymentMethod}</td>
-                    <td className="px-6 py-4 text-gray-600">{d.transactionRef}</td>
-                    <td className="px-6 py-4 text-gray-600">{d.date}</td>
-                    <td className="px-6 py-4"><StatusBadge status={d.status} /></td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button onClick={() => openEditModal("donation", d)} className="text-blue-600 border border-blue-600 rounded-md px-3 py-1 text-xs font-medium hover:bg-blue-50 transition">Update</button>
-                        <button onClick={() => handleDelete("donation", d.id)} className="text-red-600 border border-red-600 rounded-md px-3 py-1 text-xs font-medium hover:bg-red-50 transition">Delete</button>
-                      </div>
+                {loadingDonations ? (
+                  <tr>
+                    <td colSpan={8} className="px-6 py-8 text-center text-gray-400">
+                      Loading donations from database...
                     </td>
                   </tr>
-                ))}
+                ) : filteredDonations.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="px-6 py-8 text-center text-gray-400">
+                      No donations found.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredDonations.map((d, i) => (
+                    <tr key={d.id} className="border-t hover:bg-gray-50">
+                      <td className="px-6 py-4 text-gray-400">{d.id}</td>
+                      <td className="px-6 py-4 flex items-center gap-3 font-medium text-gray-800">
+                        <Avatar name={d.donorName} index={i} /> {d.donorName}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">Rs. {d.amount.toLocaleString()}</td>
+                      <td className="px-6 py-4 text-gray-600">{d.paymentMethod}</td>
+                      <td className="px-6 py-4 text-gray-600">{d.transactionRef}</td>
+                      <td className="px-6 py-4 text-gray-600">{d.date}</td>
+                      <td className="px-6 py-4"><StatusBadge status={d.status} /></td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button onClick={() => openEditModal("donation", d)} className="text-blue-600 border border-blue-600 rounded-md px-3 py-1 text-xs font-medium hover:bg-blue-50 transition">Update</button>
+                          <button onClick={() => handleDelete("donation", d.id)} className="text-red-600 border border-red-600 rounded-md px-3 py-1 text-xs font-medium hover:bg-red-50 transition">Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

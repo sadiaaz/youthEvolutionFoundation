@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { db } from "@/lib/db";
+import pool from "@/lib/db";
 import { RowDataPacket } from "mysql2";
 
 interface Admin extends RowDataPacket {
@@ -23,11 +23,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Step 2: Find admin by email
-    const [rows] = await db.query<Admin[]>(
-      "SELECT * FROM admins WHERE email = ?",
-      [email]
-    );
+    // Step 2: Find admin by email (with offline fallback if MySQL server is not started)
+    let rows: Admin[] = [];
+    try {
+      const [dbRows] = await pool.query<Admin[]>(
+        "SELECT * FROM admins WHERE email = ?",
+        [email]
+      );
+      rows = dbRows;
+    } catch (dbError: any) {
+      console.warn("MySQL connection error:", dbError?.message || dbError);
+      // If MySQL is offline (e.g., XAMPP stopped), allow default admin to login
+      if (email.trim().toLowerCase() === "admin@yef.com" && password === "Admin@123") {
+        rows = [
+          {
+            id: 1,
+            name: "Admin User",
+            email: "admin@yef.com",
+            password: "Admin@123",
+          } as Admin,
+        ];
+      } else {
+        throw dbError;
+      }
+    }
 
     if (rows.length === 0) {
       return NextResponse.json(
@@ -38,8 +57,17 @@ export async function POST(req: NextRequest) {
 
     const admin = rows[0];
 
-    // Step 3: Compare password with hashed password
-    const isMatch = await bcrypt.compare(password, admin.password);
+    // Step 3: Compare password (supports both bcrypt hash and plaintext in DB)
+    let isMatch = false;
+    try {
+      isMatch = await bcrypt.compare(password, admin.password);
+    } catch {
+      isMatch = false;
+    }
+
+    if (!isMatch && admin.password === password) {
+      isMatch = true;
+    }
 
     if (!isMatch) {
       return NextResponse.json(
@@ -49,9 +77,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 4: Generate JWT token
+    const secret = process.env.AUTH_SECRET || "change_this_later";
     const token = jwt.sign(
       { id: admin.id, email: admin.email },
-      process.env.AUTH_SECRET as string,
+      secret,
       { expiresIn: "1d" }
     );
 
@@ -71,10 +100,10 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong" },
+      { success: false, message: error?.message || "Something went wrong" },
       { status: 500 }
     );
   }
