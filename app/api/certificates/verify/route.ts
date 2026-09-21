@@ -51,22 +51,22 @@ const FALLBACK_CERTIFICATES: Array<{
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const rawEmail = searchParams.get("email");
+    const rawCertificateId = searchParams.get("certificateId");
 
-    if (!rawEmail || !rawEmail.trim()) {
+    if (!rawCertificateId || !rawCertificateId.trim()) {
       return NextResponse.json(
-        { success: false, message: "Email is required for certificate verification." },
+        { success: false, message: "Certificate ID is required for certificate verification." },
         { status: 400 }
       );
     }
 
-    const email = rawEmail.trim().toLowerCase();
+    const certificateId = rawCertificateId.trim().toUpperCase();
 
-    // Server-side email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Server-side certificate ID format validation
+    const certificateIdRegex = /^[A-Z0-9]+(?:-[A-Z0-9]+)+$/;
+    if (!certificateIdRegex.test(certificateId)) {
       return NextResponse.json(
-        { success: false, message: "Please provide a valid email address format." },
+        { success: false, message: "Please provide a valid Certificate ID (e.g., YEF-2026-2319)." },
         { status: 400 }
       );
     }
@@ -78,15 +78,15 @@ export async function GET(req: NextRequest) {
       const [dbRows] = await pool.query<CertificateRow[]>(
         `SELECT id, full_name, email, certificate_program, certificate_id, issue_date, status 
          FROM certificates 
-         WHERE LOWER(TRIM(email)) = ? 
+         WHERE UPPER(TRIM(certificate_id)) = ? 
          LIMIT 1`,
-        [email]
+        [certificateId]
       );
       rows = dbRows;
     } catch (dbErr: unknown) {
       console.warn("MySQL query failed (using safe offline fallback):", dbErr);
       const fallback = FALLBACK_CERTIFICATES.find(
-        (c) => c.email.toLowerCase() === email
+        (c) => c.certificate_id.toUpperCase() === certificateId
       );
       if (fallback) {
         rows = [fallback as unknown as CertificateRow];
@@ -97,7 +97,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: "No certificate record found for this email address. Please verify the email and try again.",
+          message: "No certificate record found for this Certificate ID. Please verify the ID and try again.",
         },
         { status: 404 }
       );
@@ -138,4 +138,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-

@@ -10,7 +10,6 @@ import {
   Search, 
   Award, 
   Calendar, 
-  Mail, 
   ArrowRight, 
   ShieldCheck, 
   RotateCcw,
@@ -27,7 +26,7 @@ interface CertificateData {
 }
 
 export default function CertificateVerificationPage() {
-  const [email, setEmail] = useState("");
+  const [certificateId, setCertificateId] = useState("");
   const [loading, setLoading] = useState(false);
   const [certificate, setCertificate] = useState<CertificateData | null>(null);
   const [errorType, setErrorType] = useState<"not_found" | "server_error" | null>(null);
@@ -40,29 +39,29 @@ export default function CertificateVerificationPage() {
     setErrorType(null);
     setCertificate(null);
 
-    const trimmed = email.trim();
+    const trimmed = certificateId.trim().toUpperCase();
     if (!trimmed) {
-      setValidationError("Please enter your registered email address.");
+      setValidationError("Please enter your Certificate ID.");
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmed)) {
-      setValidationError("Please enter a valid email address (e.g., student@example.com).");
+    const certificateIdRegex = /^[A-Z0-9]+(?:-[A-Z0-9]+)+$/;
+    if (!certificateIdRegex.test(trimmed)) {
+      setValidationError("Please enter a valid Certificate ID (e.g., YEF-2026-2319).");
       return;
     }
 
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/certificates/verify?email=${encodeURIComponent(trimmed)}`);
+      const res = await fetch(`/api/certificates/verify?certificateId=${encodeURIComponent(trimmed)}`);
       const data = await res.json();
 
       if (res.status === 200 && data.success) {
         setCertificate(data.data);
       } else if (res.status === 404) {
         setErrorType("not_found");
-        setErrorMessage(data.message || "No certificate record found for this email address.");
+        setErrorMessage(data.message || "No certificate record found for this Certificate ID.");
       } else {
         setErrorType("server_error");
         setErrorMessage(data.message || "Unable to verify certificate at this time. Please try again later.");
@@ -77,7 +76,7 @@ export default function CertificateVerificationPage() {
   };
 
   const handleReset = () => {
-    setEmail("");
+    setCertificateId("");
     setCertificate(null);
     setErrorType(null);
     setErrorMessage("");
@@ -108,22 +107,23 @@ export default function CertificateVerificationPage() {
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 sm:p-8 mb-8 backdrop-blur-sm">
           <form onSubmit={handleVerify} className="space-y-4">
             <div>
-              <label htmlFor="verify-email" className="block text-sm font-semibold text-slate-700 mb-2">
-                Registered Email Address
+              <label htmlFor="verify-certificate-id" className="block text-sm font-semibold text-slate-700 mb-2">
+                Certificate ID
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-5 h-5" />
+                  <Award className="w-5 h-5" />
                 </div>
                 <input
-                  id="verify-email"
-                  type="email"
-                  value={email}
+                  id="verify-certificate-id"
+                  type="text"
+                  value={certificateId}
                   onChange={(e) => {
-                    setEmail(e.target.value);
+                    setCertificateId(e.target.value.toUpperCase());
                     if (validationError) setValidationError("");
                   }}
-                  placeholder="e.g. numair@example.com"
+                  placeholder="e.g. YEF-2026-2319"
+                  autoComplete="off"
                   disabled={loading}
                   className="w-full pl-11 pr-4 py-3 text-sm bg-slate-50/70 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0046ad] focus:border-transparent transition-all shadow-inner disabled:opacity-60"
                 />
@@ -267,7 +267,7 @@ export default function CertificateVerificationPage() {
                 onClick={handleReset}
                 className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition"
               >
-                Try Another Email
+                Try Another Certificate ID
               </button>
               <Link
                 href="/about-us"
@@ -304,4 +304,3 @@ export default function CertificateVerificationPage() {
     </div>
   );
 }
-
