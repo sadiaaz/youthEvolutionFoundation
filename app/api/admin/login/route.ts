@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
         [email]
       );
       rows = dbRows;
-    } catch (dbError: any) {
-      console.warn("MySQL connection error:", dbError?.message || dbError);
+    } catch (dbError: unknown) {
+      console.warn("MySQL connection error:", (dbError as Error)?.message || dbError);
       // If MySQL is offline (e.g., XAMPP stopped), allow default admin to login
       if (email.trim().toLowerCase() === "admin@yef.com" && password === "Admin@123") {
         rows = [
@@ -100,10 +100,10 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { success: false, message: error?.message || "Something went wrong" },
+      { success: false, message: (error as Error)?.message || "Something went wrong" },
       { status: 500 }
     );
   }
