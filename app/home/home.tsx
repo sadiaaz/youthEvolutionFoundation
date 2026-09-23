@@ -567,7 +567,7 @@ export default function Home({
                   {currentHero.primary}
                 </CTAButton>
 
-                <CTAButton href="#support" variant="light">
+                <CTAButton href="/donate" variant="light">
                   {(safeHeroIndex === 0 || safeHeroIndex === 2) && (
                     <Heart />
                   )}
@@ -682,7 +682,7 @@ export default function Home({
               </div>
 
               <a
-                href="#about"
+                href="/about-us"
                 className="mt-7 inline-flex h-[42px] items-center gap-2 rounded-[7px] bg-[#0758AA] px-5 text-[13px] font-semibold text-white shadow-[0_5px_18px_rgba(7,88,170,0.16)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#064c92]"
               >
                 Learn More About YEF
@@ -1107,7 +1107,7 @@ export default function Home({
                   Volunteer
                 </CTAButton>
 
-                <CTAButton href="#donate" variant="outline">
+                <CTAButton href="/donate" variant="outline">
                   <PlusIcon />
                   Donate
                 </CTAButton>
