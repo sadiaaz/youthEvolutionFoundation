@@ -13,9 +13,10 @@ interface HeroSliderProps {
   slides: Slide[];
   title: string;
   subtitle?: string;
+  showButtons?: boolean;
 }
 
-export function HeroSlider({ slides, title, subtitle }: HeroSliderProps) {
+export function HeroSlider({ slides, title, subtitle, showButtons = true }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function HeroSlider({ slides, title, subtitle }: HeroSliderProps) {
         {slides.map((slide, index) => (
           <img
             key={index}
-            src={urlFor(slide.image).width(1600).height(900).url()}
+            src={urlFor(slide.image).width(1600).url()}
             alt={slide.alt || title}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
               index === current ? "opacity-100" : "opacity-0"
@@ -91,18 +92,20 @@ export function HeroSlider({ slides, title, subtitle }: HeroSliderProps) {
               <p className="mt-5 max-w-xl text-lg text-white/90">{subtitle}</p>
             )}
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link href="/programs">
-                <button className="w-full rounded-md bg-blue-800 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-blue-900 sm:w-auto">
-                  Our Programs
-                </button>
-              </Link>
-              <Link href="/get-involved">
-                <button className="w-full rounded-md bg-white px-8 py-3.5 font-semibold text-blue-800 transition-colors hover:bg-blue-50 sm:w-auto">
-                  Join as a Volunteer
-                </button>
-              </Link>
-            </div>
+            {showButtons && (
+  <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+    <Link href="/programs">
+      <button className="w-full rounded-md bg-blue-800 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-blue-900 sm:w-auto">
+        Our Programs
+      </button>
+    </Link>
+    <Link href="/get-involved">
+      <button className="w-full rounded-md bg-white px-8 py-3.5 font-semibold text-blue-800 transition-colors hover:bg-blue-50 sm:w-auto">
+        Join as a Volunteer
+      </button>
+    </Link>
+  </div>
+)}
 
             {slides.length > 1 && (
               <div className="mt-10 flex gap-2">

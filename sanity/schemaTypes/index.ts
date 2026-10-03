@@ -9,6 +9,8 @@ import value from './values'
 import leadership from './leadership'
 import team from './team'
 import testimonial from './testimonial'
+import event from './event'
+import eventsPage from './eventsPage'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -22,5 +24,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     leadership,
     team,
     testimonial,
+    event,
+    eventsPage,
   ],
 }

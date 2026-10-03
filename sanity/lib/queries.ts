@@ -63,3 +63,33 @@ export const heroBannerQuery = groq`*[_type == "heroBanner"]
     primaryButton,
     secondaryButton
   }`
+export const eventsQuery = groq`*[_type == "event"] | order(eventDate desc){
+  _id,
+  title,
+  slug,
+  description,
+  image,
+  eventDate,
+  location,
+  status
+}`
+
+export const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0]{
+  _id,
+  title,
+  slug,
+  description,
+  content,
+  image,
+  heroImage,
+  eventDate,
+  location,
+  status,
+  registrationLink,
+  seoTitle,
+  seoDescription
+}`
+
+export const eventsPageQuery = groq`*[_type == "eventsPage"][0]{
+  heroSlides[]{ image, alt }
+}`
