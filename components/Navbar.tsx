@@ -25,6 +25,7 @@ const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/", title: "Youth Evolution Foundation Home" },
   { label: "About", href: "/about-us", title: "About Youth Evolution Foundation" },
   { label: "Our Work", href: "/our-work", title: "Our Work in Evolution Foundation" },
+  { label: "Events", href: "/events", title: "Events by Youth Evolution Foundation" },
 ];
 
 export default function Navbar() {
