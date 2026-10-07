@@ -93,3 +93,11 @@ export const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug
 export const eventsPageQuery = groq`*[_type == "eventsPage"][0]{
   heroSlides[]{ image, alt }
 }`
+
+export const contactPageQuery = groq`*[_type == "contactPage"][0]{
+  heroImage,
+  officeAddress,
+  phoneNumbers,
+  faxNumber,
+  email
+}`
