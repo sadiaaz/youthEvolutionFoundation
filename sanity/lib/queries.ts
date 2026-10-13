@@ -101,3 +101,10 @@ export const contactPageQuery = groq`*[_type == "contactPage"][0]{
   faxNumber,
   email
 }`
+
+export const volunteerPageQuery = groq`*[_type == "volunteerPage"][0]{
+  heroImage,
+  sideImage,
+  sideTitle,
+  sideSubtitle
+}`
